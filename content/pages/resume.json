@@ -1,7 +1,11 @@
 {
-  "intro": "Want the one-page version? Grab my résumé — it covers my experience, key projects, and certifications.",
-  "file": "/uploads/resume.pdf",
+  "intro": "The one-page version: my skills, experience, projects and certifications.",
+  "file": "/uploads/Amr_Zakariya_Resume.pdf",
   "buttonLabel": "Download résumé (PDF)",
-  "updated": "November 2026",
-  "points": ["6+ years across DevOps, cloud and full-stack", "AWS, Azure & Kubernetes certified", "Available for full-time & consulting"]
+  "updated": "2026",
+  "points": [
+    "Cloud & DevOps engineer · B.Sc. Computer Science & AI",
+    "AWS, Terraform, Docker, Kubernetes & GitHub Actions",
+    "Open to on-site, hybrid and remote roles"
+  ]
 }

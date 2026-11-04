@@ -63,7 +63,7 @@ const levels = ['line', 'app', 'system', 'cluster', 'cloud'];
               {/* ── L4 · cluster ── */}
               <g class="lvl" data-lvl="3">
                 <rect class="box cluster" x="-290" y="-190" width="580" height="380" rx="10" />
-                <text class="lbl" x="-272" y="-166" font-size="12">eks-prod · k8s 1.31</text>
+                <text class="lbl" x="-272" y="-166" font-size="12">k3s-lab · argocd</text>
                 {[
                   [-230, -120],
                   [-230, 60],
@@ -75,7 +75,7 @@ const levels = ['line', 'app', 'system', 'cluster', 'cloud'];
                     {[0, 1, 2, 3].map((i) => <rect class="node" x={8 + (i % 2) * 22} y={10 + Math.floor(i / 2) * 26} width="16" height="18" rx="2" />)}
                   </g>
                 ))}
-                <text class="cap" x="0" y="170" font-size="9" text-anchor="middle">nodes autoscale with karpenter</text>
+                <text class="cap" x="0" y="170" font-size="9" text-anchor="middle">cluster state reconciled from git</text>
               </g>
 
               {/* ── L3 · system: services ── */}

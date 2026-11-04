@@ -1,59 +1,55 @@
 {
-  "intro": "Four disciplines, one mindset: build it right, ship it safely, keep it running.",
+  "intro": "The tools I use to build, ship and run infrastructure — taken straight from my projects.",
   "domains": [
     {
-      "name": "DevOps",
-      "icon": "devops",
-      "summary": "Automated, observable delivery from commit to production.",
-      "skills": [
-        { "name": "Kubernetes", "level": 5 },
-        { "name": "Docker", "level": 5 },
-        { "name": "Terraform", "level": 5 },
-        { "name": "GitHub Actions / GitLab CI", "level": 5 },
-        { "name": "Argo CD (GitOps)", "level": 4 },
-        { "name": "Prometheus & Grafana", "level": 4 },
-        { "name": "Ansible", "level": 3 }
-      ]
-    },
-    {
-      "name": "System Design",
-      "icon": "system",
-      "summary": "Architectures that scale, fail gracefully, and stay simple.",
-      "skills": [
-        { "name": "Distributed systems", "level": 4 },
-        { "name": "Microservices & event-driven", "level": 5 },
-        { "name": "Kafka / RabbitMQ", "level": 4 },
-        { "name": "Caching strategies (Redis)", "level": 4 },
-        { "name": "API design (REST, gRPC)", "level": 5 },
-        { "name": "Database modelling", "level": 4 }
-      ]
-    },
-    {
-      "name": "Cloud Solutions",
+      "name": "Cloud",
       "icon": "cloud",
-      "summary": "Secure, cost-aware platforms on every major cloud.",
+      "summary": "AWS across compute, serverless, networking and IAM — plus Huawei Cloud.",
       "skills": [
-        { "name": "AWS (EKS, Lambda, RDS, S3)", "level": 5 },
-        { "name": "Azure (AKS, Functions)", "level": 4 },
-        { "name": "Google Cloud (GKE, Cloud Run)", "level": 3 },
-        { "name": "Serverless", "level": 4 },
-        { "name": "IAM & cloud security", "level": 4 },
-        { "name": "FinOps / cost optimisation", "level": 4 }
+        { "name": "EC2, VPC & networking", "level": 4 },
+        { "name": "Lambda, API Gateway & DynamoDB", "level": 4 },
+        { "name": "S3 & CloudFront", "level": 4 },
+        { "name": "IAM (least privilege)", "level": 4 },
+        { "name": "CloudWatch, SNS & Budgets", "level": 4 },
+        { "name": "Huawei Cloud", "level": 3 }
       ]
     },
     {
-      "name": "App & Web Development",
-      "icon": "code",
-      "summary": "Fast, accessible products on web and mobile.",
+      "name": "Infrastructure as Code & CI/CD",
+      "icon": "devops",
+      "summary": "Declarative infrastructure and keyless, automated delivery.",
       "skills": [
-        { "name": "TypeScript / JavaScript", "level": 5 },
-        { "name": "React & Next.js", "level": 5 },
-        { "name": "Node.js", "level": 5 },
-        { "name": "Python (FastAPI, Django)", "level": 4 },
-        { "name": "Flutter / React Native", "level": 3 },
-        { "name": "PostgreSQL & MongoDB", "level": 4 }
+        { "name": "Terraform", "level": 4 },
+        { "name": "AWS CloudFormation & SAM", "level": 4 },
+        { "name": "GitHub Actions (OIDC federation)", "level": 4 },
+        { "name": "Git & GitHub", "level": 4 }
+      ]
+    },
+    {
+      "name": "Containers & Observability",
+      "icon": "layers",
+      "summary": "Packaging, orchestrating and watching workloads.",
+      "skills": [
+        { "name": "Docker & Docker Compose", "level": 4 },
+        { "name": "Kubernetes & k3s", "level": 3 },
+        { "name": "ArgoCD (GitOps)", "level": 3 },
+        { "name": "Prometheus & Grafana", "level": 3 },
+        { "name": "Amazon CloudWatch", "level": 4 }
+      ]
+    },
+    {
+      "name": "Networking, Security & Systems",
+      "icon": "shield",
+      "summary": "The foundations underneath it all.",
+      "skills": [
+        { "name": "TCP/IP, DNS & VPC design", "level": 4 },
+        { "name": "Security groups, TLS/HTTPS", "level": 4 },
+        { "name": "Linux & Bash", "level": 4 },
+        { "name": "Python", "level": 3 },
+        { "name": "PostgreSQL & Redis", "level": 3 },
+        { "name": "Wireshark", "level": 3 }
       ]
     }
   ],
-  "toolbelt": ["Linux", "Bash", "Go", "Helm", "Istio", "Vault", "Nginx", "Cloudflare", "Datadog", "ELK", "Jenkins", "Packer", "Git", "Figma"]
+  "toolbelt": ["Windows", "MySQL", "SQL Server", "FastAPI", "Gunicorn", "Alembic", "React", "Snort 3", "NFStream", "Microsoft 365"]
 }

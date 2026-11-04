@@ -18,7 +18,13 @@ const { title, kicker } = Astro.props;
           <li class="cert reveal" style={`--d:${i % 4}`}>
             <span class="yr mono">{c.date || '—'}</span>
             <span class="badge">
-              {c.badge ? <img src={c.badge} alt="" loading="lazy" decoding="async" width="40" height="40" /> : <span class="tick mono">✓</span>}
+              {c.badge ? (
+                <img src={c.badge} alt="" loading="lazy" decoding="async" width="40" height="40" />
+              ) : /progress|prep|ongoing/i.test(c.date) ? (
+                <span class="tick pending mono" title="In progress">◌</span>
+              ) : (
+                <span class="tick mono">✓</span>
+              )}
             </span>
             <span class="info">
               <span class="name">{c.name}</span>
@@ -47,7 +53,7 @@ const { title, kicker } = Astro.props;
   }
   .cert {
     display: grid;
-    grid-template-columns: 60px 40px minmax(0, 1fr) auto;
+    grid-template-columns: 96px 40px minmax(0, 1fr) auto;
     align-items: center;
     gap: 18px;
     padding: 16px 0;
@@ -72,6 +78,9 @@ const { title, kicker } = Astro.props;
   }
   .tick {
     color: var(--accent-ink);
+  }
+  .tick.pending {
+    color: var(--muted);
   }
   .info {
     display: grid;

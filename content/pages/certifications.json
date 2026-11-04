@@ -1,34 +1,74 @@
 {
-  "intro": "Formal proof of the hands-on work.",
+  "intro": "Training and certifications across AWS, Huawei Cloud and IBM.",
   "items": [
     {
-      "name": "AWS Certified Solutions Architect – Professional",
-      "issuer": "Amazon Web Services",
-      "date": "2025",
+      "name": "AWS Certified Solutions Architect – Associate",
+      "issuer": "Amazon Web Services · preparing via Manara",
+      "date": "in progress",
       "credentialId": "",
       "verifyUrl": "",
       "badge": ""
     },
     {
-      "name": "Certified Kubernetes Administrator (CKA)",
-      "issuer": "The Linux Foundation",
-      "date": "2024",
+      "name": "Cloud Solution Administrator and Architect",
+      "issuer": "AWS · DEPI / NTI",
+      "date": "",
       "credentialId": "",
       "verifyUrl": "",
       "badge": ""
     },
     {
-      "name": "HashiCorp Certified: Terraform Associate",
-      "issuer": "HashiCorp",
-      "date": "2024",
+      "name": "AWS Academy Cloud Architecting",
+      "issuer": "AWS Academy",
+      "date": "",
       "credentialId": "",
       "verifyUrl": "",
       "badge": ""
     },
     {
-      "name": "Microsoft Certified: Azure Administrator Associate",
-      "issuer": "Microsoft",
-      "date": "2023",
+      "name": "AWS Academy Cloud Developer",
+      "issuer": "AWS Academy",
+      "date": "",
+      "credentialId": "",
+      "verifyUrl": "",
+      "badge": ""
+    },
+    {
+      "name": "AWS Academy Cloud Foundations",
+      "issuer": "AWS Academy",
+      "date": "",
+      "credentialId": "",
+      "verifyUrl": "",
+      "badge": ""
+    },
+    {
+      "name": "HCCDA – Tech Essentials",
+      "issuer": "Huawei Cloud",
+      "date": "",
+      "credentialId": "",
+      "verifyUrl": "",
+      "badge": ""
+    },
+    {
+      "name": "HCCDP – Cloud Migration",
+      "issuer": "Huawei Cloud",
+      "date": "",
+      "credentialId": "",
+      "verifyUrl": "",
+      "badge": ""
+    },
+    {
+      "name": "Containers and Kubernetes Essentials",
+      "issuer": "IBM",
+      "date": "",
+      "credentialId": "",
+      "verifyUrl": "",
+      "badge": ""
+    },
+    {
+      "name": "Cloud Security",
+      "issuer": "IBM",
+      "date": "",
       "credentialId": "",
       "verifyUrl": "",
       "badge": ""

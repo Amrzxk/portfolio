@@ -1,21 +1,22 @@
 {
   "name": "Amr Zakariya",
-  "role": "DevOps & Cloud Engineer",
+  "role": "Cloud & DevOps Engineer",
   "siteUrl": "https://amr.amrzakariya2020.workers.dev",
   "accent": "#3ddc84",
   "email": "amrzakariya2018@gmail.com",
-  "location": "Remote · Available worldwide",
+  "location": "Cairo, Egypt",
   "seo": {
-    "title": "Amr Zakariya — DevOps, Cloud & System Design",
-    "description": "DevOps and cloud engineer who designs scalable systems, automates delivery pipelines, and builds web and mobile apps end to end.",
+    "title": "Amr Zakariya — Cloud & DevOps Engineer",
+    "description": "Cloud and DevOps engineer with an everything-as-code approach: AWS, Terraform, Docker, Kubernetes and keyless CI/CD in GitHub Actions. Open to DevOps and Cloud Engineering roles — on-site, hybrid or remote.",
     "image": "",
     "keywords": [
       "DevOps",
       "Cloud",
-      "System Design",
-      "Kubernetes",
       "AWS",
-      "Full-Stack"
+      "Terraform",
+      "Kubernetes",
+      "DevOps",
+      "GitHub Actions"
     ]
   },
   "socials": [
@@ -26,7 +27,7 @@
     },
     {
       "label": "LinkedIn",
-      "url": "https://www.linkedin.com/",
+      "url": "https://www.linkedin.com/in/amr-swefy-8a1a0426b",
       "icon": "linkedin"
     }
   ],
@@ -64,7 +65,7 @@
       "enabled": true,
       "title": "Projects",
       "showInNav": true,
-      "intro": "Selected work across infrastructure, architecture and product. Filter by discipline."
+      "intro": "Hands-on builds on AWS and Kubernetes — every resource defined as code. Filter by discipline."
     },
     {
       "id": "experience",
@@ -85,7 +86,7 @@
       "enabled": true,
       "title": "Writing",
       "showInNav": true,
-      "intro": "Notes on system design, cloud architecture and shipping software."
+      "intro": "Notes on cloud architecture, infrastructure as code and shipping reliably."
     },
     {
       "id": "resume",

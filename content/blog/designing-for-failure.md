@@ -4,7 +4,7 @@ description: Timeouts, retries with jitter, circuit breakers, bulkheads and grac
 date: 2026-09-12
 tags: [system-design, reliability]
 cover: ""
-draft: false
+draft: true
 ---
 
 Everything fails eventually. The question is whether your system fails **gracefully** or takes everything down with it. Here are the five patterns I reach for first.

@@ -1,47 +1,48 @@
 {
   "prompt": "$ whoami",
   "greeting": "Hi, I'm Amr.",
-  "headline": "I design systems that *scale* — and the pipelines that *ship* them.",
-  "intro": "From the first line of code to the last packet through the load balancer, I care about the whole journey: architecture, infrastructure, delivery, and the product people actually use.",
-  "roles": ["DevOps Engineer", "Cloud Solutions Architect", "System Designer", "App & Web Developer"],
+  "headline": "I build cloud infrastructure *as code* — and the pipelines that *ship* it.",
+  "intro": "Computer Science & AI graduate and cloud engineer. I build on AWS across compute, serverless, networking and IAM, containerise with Docker and Kubernetes, run keyless CI/CD in GitHub Actions, and define it all in Terraform, CloudFormation and SAM.",
+  "roles": ["Cloud Engineer", "DevOps Engineer", "Infrastructure as Code", "Cloud Security"],
   "primaryCta": { "label": "See my work", "href": "/#projects" },
   "showResumeButton": true,
   "terminalTitle": "~/amr/portfolio",
   "stats": [
-    { "value": "6+", "label": "Years shipping software" },
-    { "value": "40+", "label": "Services deployed to prod" },
-    { "value": "99.95%", "label": "Uptime on platforms I run" }
+    { "value": "25+", "label": "AWS resources defined as code" },
+    { "value": "<2 min", "label": "full serverless deploy" },
+    { "value": "~111K", "label": "flows/sec in my IDS pipeline" },
+    { "value": "99.9%", "label": "uptime on my NTI AWS build" }
   ],
-  "chaptersIntro": "Every system has an origin story. Here's mine — scroll through it.",
+  "chaptersIntro": "From a single line of code to infrastructure across the cloud — scroll through how I got here.",
   "chapters": [
     {
-      "marker": "Chapter 01",
-      "title": "It started with a broken website",
-      "body": "I taught myself HTML to fix a site nobody else would touch. The moment it loaded, I was hooked — not just on building things, but on understanding why they break.",
+      "marker": "2022",
+      "title": "It started with code",
+      "body": "I began a B.Sc. in Computer Science & Artificial Intelligence at Capital University in Cairo — and quickly cared less about code running on my machine than about code running reliably everywhere.",
       "image": ""
     },
     {
-      "marker": "Chapter 02",
-      "title": "From pages to products",
-      "body": "I moved on to full-stack web and mobile apps: React front ends, Node and Python APIs, Flutter on the phone. Shipping features taught me that great code is useless if it can't reach users reliably.",
+      "marker": "2024 · NTI",
+      "title": "My first AWS architecture",
+      "body": "Through the NTI program I designed a segmented VPC with public and private subnets, and ran a highly available EC2 web app with assets on S3 — 99.9% uptime, CloudWatch alerting and disaster recovery proven by failover tests.",
       "image": ""
     },
     {
-      "marker": "Chapter 03",
-      "title": "Falling for the pipeline",
-      "body": "Manual deploys at 2 a.m. pushed me into DevOps. I automated everything I could — CI/CD, infrastructure as code, containers — and watched release days go from dreaded to boring. Boring is good.",
+      "marker": "2025",
+      "title": "Everything as code",
+      "body": "I built a serverless URL shortener from 25+ resources in AWS SAM and CloudFormation, deploying in under two minutes through keyless GitHub Actions CI/CD — OIDC to short-lived IAM roles, no stored credentials.",
       "image": ""
     },
     {
-      "marker": "Chapter 04",
-      "title": "Thinking in systems",
-      "body": "Scale forced bigger questions: queues or streams? SQL or NoSQL? Where do we cache, and what happens when a region goes dark? System design became the way I reason about every problem.",
+      "marker": "2025 – 26",
+      "title": "Systems under real load",
+      "body": "For my graduation project I engineered a hybrid intrusion detection system: Redis Pub/Sub services, a FastAPI and PostgreSQL backend and an ML-plus-Snort pipeline sustaining ~111K flows per second, all containerised. Meanwhile I ran Microsoft 365 and first-line IT as an intern at Genesis Creations.",
       "image": ""
     },
     {
       "marker": "Now",
-      "title": "Building on the cloud",
-      "body": "Today I architect cloud platforms end to end — secure, observable, cost-aware — and still write the app code that runs on them. I'm looking for teams who want both halves done right.",
+      "title": "GitOps, and what's next",
+      "body": "Today I'm building a GitOps lab — Terraform-provisioned AWS and a k3s cluster whose state ArgoCD reconciles straight from Git — while preparing for AWS Solutions Architect – Associate. Next: a DevOps or Cloud Engineering role, on-site, hybrid or remote.",
       "image": ""
     }
   ]

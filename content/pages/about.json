@@ -1,13 +1,13 @@
 {
   "kicker": "About me",
-  "heading": "Engineer by trade, *systems thinker* by habit.",
+  "heading": "Everything as code — *infrastructure* included.",
   "photo": "",
-  "body": "I'm a DevOps and cloud engineer with a full-stack developer's instincts. I like owning problems end to end: sketching the architecture, provisioning it with Terraform, wiring up the CI/CD, and writing the application code that runs on top.\n\nI've helped teams migrate monoliths to Kubernetes, cut cloud bills without cutting reliability, and turn week-long release cycles into multiple deploys a day.\n\nOutside work I write about system design, contribute to open-source tooling, and tinker with my homelab cluster.",
+  "body": "I'm a cloud and DevOps engineer and a Computer Science & Artificial Intelligence graduate from Capital University in Cairo. I treat infrastructure the way good engineers treat software: declared in code, reviewed, versioned and deployed by pipelines — never clicked together by hand.\n\nI build on AWS across compute, serverless, networking and IAM; containerise workloads with Docker and Kubernetes; run keyless CI/CD in GitHub Actions with OIDC federation; and define infrastructure in Terraform, CloudFormation and SAM. Security and cost are part of the design from the start: least-privilege IAM, locked-down S3, CloudWatch alarms and budget alerts.\n\nI'm comfortable on Linux, with practical experience in VPC design, cloud security and incident response — and I'm looking for DevOps and Cloud Engineering roles, on-site, hybrid or remote.",
   "highlights": [
-    "Kubernetes, Terraform & GitOps in production",
-    "Multi-cloud: AWS, Azure & GCP",
-    "Designing for scale, resilience & cost",
-    "Full-stack apps: React, Node, Python, Flutter"
+    "AWS: EC2, Lambda, API Gateway, DynamoDB, VPC, IAM",
+    "Terraform, CloudFormation & AWS SAM",
+    "Docker, Kubernetes & k3s · GitOps with ArgoCD",
+    "Arabic (native) · English (professional)"
   ],
-  "availability": { "open": true, "text": "Open to full-time roles & consulting" }
+  "availability": { "open": true, "text": "Open to DevOps & Cloud roles · on-site, hybrid or remote" }
 }
