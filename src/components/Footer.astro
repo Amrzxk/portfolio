@@ -1,60 +1,84 @@
 ---
-import Icon from './Icon.astro';
-import { site } from '../lib/data';
+import { isEnabled, site } from '../lib/data';
 const year = new Date().getFullYear();
+const contactHref = isEnabled('contact') ? '/#contact' : site.email ? `mailto:${site.email}` : '/';
 ---
 
 <footer class="footer">
-  <div class="container footer-inner">
-    <div>
-      <p class="footer-name">© {year} {site.name}</p>
-      {site.footerNote && <p class="footer-note mono">{site.footerNote}</p>}
+  <div class="container">
+    <a class="signoff serif" href={contactHref}>
+      Let’s build something <em class="em">reliable</em>. <span class="arr" aria-hidden="true">→</span>
+    </a>
+
+    <div class="bottom mono">
+      <p>© {year} {site.name}</p>
+      {site.footerNote && <p class="note">{site.footerNote}</p>}
+      <ul class="links">
+        {
+          site.socials.map((s) => (
+            <li>
+              <a class="u" href={s.url} target={s.url.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer">
+                {s.label.toLowerCase()}
+              </a>
+            </li>
+          ))
+        }
+        <li><a class="u" href="/rss.xml">rss</a></li>
+        <li><a class="u" href="#main">top ↑</a></li>
+      </ul>
     </div>
-    <ul class="footer-socials" aria-label="Social links">
-      {
-        site.socials.map((s) => (
-          <li>
-            <a class="icon-btn" href={s.url} target={s.url.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer" aria-label={s.label}>
-              <Icon name={s.icon} />
-            </a>
-          </li>
-        ))
-      }
-      <li>
-        <a class="icon-btn" href="#main" aria-label="Back to top">
-          <Icon name="arrow" class="up" />
-        </a>
-      </li>
-    </ul>
   </div>
 </footer>
 
 <style>
   .footer {
+    margin-top: 24px;
+    padding: clamp(56px, 8vw, 96px) 0 32px;
     border-top: 1px solid var(--border);
-    padding-block: 32px;
-    margin-top: 32px;
   }
-  .footer-inner {
+  .signoff {
+    display: inline-block;
+    font-size: clamp(2.6rem, 6vw + 1rem, 6.4rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    transition: color 0.3s;
+  }
+  .signoff .arr {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-size: 0.5em;
+    vertical-align: 0.25em;
+    color: var(--faint);
+    transition:
+      transform 0.4s var(--ease),
+      color 0.3s;
+  }
+  .signoff:hover .arr {
+    transform: translateX(10px);
+    color: var(--accent-ink);
+  }
+  .bottom {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-  }
-  .footer-name {
-    font-weight: 600;
-  }
-  .footer-note {
-    margin-top: 4px;
-    font-size: 0.78rem;
+    gap: 10px 28px;
+    margin-top: clamp(40px, 6vw, 72px);
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    font-size: 0.75rem;
     color: var(--faint);
   }
-  .footer-socials {
-    display: flex;
-    gap: 4px;
+  .note {
+    flex: 1;
   }
-  .footer-socials :global(.up) {
-    transform: rotate(-90deg);
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+  }
+  .links a {
+    display: inline-block;
+    padding: 6px 0;
+    color: var(--muted);
   }
 </style>

@@ -16,24 +16,26 @@ const { title, kicker } = Astro.props;
       {
         experience.items.map((j) => (
           <li class="job reveal">
-            <div class="when mono">
-              <span>{j.start}</span>
-              <span class="sep">—</span>
-              <span>{j.current ? 'Present' : j.end || 'Present'}</span>
-              {j.current && <span class="now">Now</span>}
-            </div>
-            <div class="card what">
-              <h3>{j.role}</h3>
-              <p class="org">
-                {j.companyUrl ? (
-                  <a href={j.companyUrl} target="_blank" rel="noopener noreferrer">
-                    {j.company}
-                  </a>
-                ) : (
-                  j.company
-                )}
-                {j.location && <span class="muted"> · {j.location}</span>}
-              </p>
+            <p class="when mono">
+              {j.start} <span class="faint">—</span> {j.current ? 'present' : j.end || 'present'}
+              {j.current && <span class="now">● now</span>}
+            </p>
+            <div class="what">
+              <h3>
+                {j.role}
+                <span class="at">
+                  {' '}
+                  at{' '}
+                  {j.companyUrl ? (
+                    <a class="u" href={j.companyUrl} target="_blank" rel="noopener noreferrer">
+                      {j.company}
+                    </a>
+                  ) : (
+                    j.company
+                  )}
+                </span>
+              </h3>
+              {j.location && <p class="loc mono">{j.location}</p>}
               {j.summary && <p class="summary">{j.summary}</p>}
               {j.highlights.length > 0 && (
                 <ul class="hl">
@@ -42,13 +44,7 @@ const { title, kicker } = Astro.props;
                   ))}
                 </ul>
               )}
-              {j.stack.length > 0 && (
-                <ul class="chip-list">
-                  {j.stack.map((s) => (
-                    <li class="chip">{s}</li>
-                  ))}
-                </ul>
-              )}
+              {j.stack.length > 0 && <p class="stack mono">{j.stack.join(' / ')}</p>}
             </div>
           </li>
         ))
@@ -58,48 +54,53 @@ const { title, kicker } = Astro.props;
 </section>
 
 <style>
-  .jobs {
-    display: grid;
-    gap: clamp(16px, 2.5vw, 24px);
-  }
   .job {
     display: grid;
     grid-template-columns: 200px minmax(0, 1fr);
-    gap: clamp(16px, 3vw, 40px);
+    gap: 10px 24px;
+    padding: 28px 0;
+    border-top: 1px solid var(--border);
+  }
+  .job:last-child {
+    border-bottom: 1px solid var(--border);
   }
   .when {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
     align-content: flex-start;
-    gap: 6px;
-    padding-top: 26px;
-    font-size: 0.85rem;
+    gap: 4px 6px;
+    padding-top: 0.3em;
+    font-size: 0.8rem;
     color: var(--muted);
   }
-  .sep {
-    color: var(--faint);
-  }
   .now {
-    padding: 2px 8px;
-    border-radius: 999px;
-    background: var(--accent-soft);
+    width: 100%;
     color: var(--accent-ink);
     font-size: 0.72rem;
   }
-  .what h3 {
-    font-size: 1.2rem;
+  .what {
+    max-width: 760px;
   }
-  .org {
-    margin-top: 4px;
-    font-weight: 500;
+  h3 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(1.6rem, 1.2vw + 1.1rem, 2.1rem);
+    line-height: 1.1;
+  }
+  .at {
+    font-style: italic;
     color: var(--accent-ink);
   }
-  .org a:hover {
-    text-decoration: underline;
+  .at .u {
+    color: inherit;
+  }
+  .loc {
+    margin-top: 6px;
+    font-size: 0.74rem;
+    color: var(--faint);
   }
   .summary {
-    margin-top: 12px;
+    margin-top: 14px;
     color: var(--muted);
   }
   .hl {
@@ -109,22 +110,26 @@ const { title, kicker } = Astro.props;
   }
   .hl li {
     position: relative;
-    padding-left: 22px;
-    font-size: 0.96rem;
+    padding-left: 24px;
+    font-size: 0.97rem;
   }
   .hl li::before {
-    content: '▹';
+    content: '—';
     position: absolute;
     left: 0;
     color: var(--accent-ink);
   }
-  @media (max-width: 719px) {
+  .stack {
+    font-size: 0.74rem;
+    color: var(--faint);
+  }
+  @media (max-width: 759px) {
     .job {
       grid-template-columns: minmax(0, 1fr);
-      gap: 10px;
     }
-    .when {
-      padding-top: 0;
+    .now {
+      width: auto;
+      margin-left: 8px;
     }
   }
 </style>

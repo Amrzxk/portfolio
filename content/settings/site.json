@@ -2,7 +2,7 @@
   "name": "Amr Zakariya",
   "role": "DevOps & Cloud Engineer",
   "siteUrl": "https://amr.amrzakariya2020.workers.dev",
-  "accent": "#22d3ee",
+  "accent": "#3ddc84",
   "email": "amrzakariya2018@gmail.com",
   "location": "Remote · Available worldwide",
   "seo": {
@@ -102,5 +102,5 @@
       "intro": ""
     }
   ],
-  "footerNote": "Built with Astro · Hosted for $0 on Cloudflare Pages"
+  "footerNote": "Built with Astro · Served for $0 from Cloudflare's edge"
 }

@@ -1,6 +1,6 @@
 ---
 title: How This Portfolio Runs for $0
-description: Astro, a Git-based CMS, Cloudflare Pages and Google Apps Script — a fully editable site with zero monthly cost.
+description: Astro, a Git-based CMS, Cloudflare Workers and Google Apps Script — a fully editable site with zero monthly cost.
 date: 2026-11-01
 tags: [devops, cloud, web]
 cover: ""
@@ -13,7 +13,7 @@ This site costs nothing to run, and I can still edit every word of it from a bro
 
 - **Astro** generates a fully static site — no server to pay for or patch.
 - **Sveltia CMS** gives me an admin panel at `/admin`. Saving a change commits JSON or Markdown to GitHub.
-- **Cloudflare Pages** watches the repo and rebuilds on every commit, then serves the result from its global edge network with unlimited bandwidth.
+- **Cloudflare Workers** watches the repo and rebuilds on every commit, then serves the static files from its global edge network with unlimited bandwidth.
 - **A tiny Cloudflare Worker** handles the GitHub OAuth handshake so I can log in to the admin.
 - **Google Apps Script** receives contact-form submissions and emails them straight to my Gmail.
 

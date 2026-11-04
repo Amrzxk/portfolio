@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../lib/data';
+import { plain } from '../lib/format';
 
 interface Props {
   title?: string;
@@ -12,7 +13,7 @@ interface Props {
 }
 const { title, description, image, type = 'website' } = Astro.props;
 
-const pageTitle = title ? `${title} · ${site.name}` : site.seo.title;
+const pageTitle = title ? `${plain(title)} · ${site.name}` : site.seo.title;
 const pageDesc = description || site.seo.description;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = image || site.seo.image;
@@ -34,7 +35,7 @@ const accentCss = `:root{--accent:${site.accent}}`;
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title={`${site.name} — Writing`} href="/rss.xml" />
-    <meta name="theme-color" content="#0a0e14" />
+    <meta name="theme-color" content="#070907" data-theme-color />
 
     <meta property="og:type" content={type} />
     <meta property="og:title" content={pageTitle} />
@@ -51,7 +52,7 @@ const accentCss = `:root{--accent:${site.accent}}`;
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap"
     />
 
     <style is:inline set:html={accentCss} />
@@ -67,12 +68,13 @@ const accentCss = `:root{--accent:${site.accent}}`;
         }
         d.setAttribute('data-theme', t);
         d.classList.add('js');
+        var m = document.querySelector('[data-theme-color]');
+        if (m) m.setAttribute('content', t === 'light' ? '#f5f1e8' : '#070907');
       })();
     </script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <div class="bg-grid" aria-hidden="true"></div>
     <Nav />
     <main id="main">
       <slot />

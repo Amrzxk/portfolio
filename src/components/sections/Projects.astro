@@ -20,13 +20,15 @@ const used = DOMAIN_IDS.filter((d) => projects.some((p) => p.data.domains.includ
 
     {
       used.length > 1 && (
-        <div class="filters reveal" role="group" aria-label="Filter projects" data-filters>
+        <div class="filters mono reveal" role="group" aria-label="Filter projects" data-filters>
+          <span class="faint lbl">filter:</span>
           <button type="button" class="filter" aria-pressed="true" data-filter="all">
-            All <span class="count">{projects.length}</span>
+            all<sup>{projects.length}</sup>
           </button>
           {used.map((d) => (
             <button type="button" class="filter" aria-pressed="false" data-filter={d}>
-              {DOMAIN_LABELS[d]} <span class="count">{projects.filter((p) => p.data.domains.includes(d)).length}</span>
+              {DOMAIN_LABELS[d].toLowerCase()}
+              <sup>{projects.filter((p) => p.data.domains.includes(d)).length}</sup>
             </button>
           ))}
         </div>
@@ -52,43 +54,43 @@ const used = DOMAIN_IDS.filter((d) => projects.some((p) => p.data.domains.includ
   .filters {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    align-items: center;
+    gap: 4px 18px;
     margin-bottom: 28px;
+    font-size: 0.82rem;
   }
   .filter {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
     min-height: 40px;
-    padding: 0 16px;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    background: var(--surface);
+    padding: 0;
+    border: 0;
+    background: none;
     color: var(--muted);
-    font: 500 0.9rem/1 var(--font-sans);
+    font: inherit;
     cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 6px;
     transition:
       color 0.2s,
-      border-color 0.2s,
-      background-color 0.2s;
+      text-decoration-color 0.2s;
   }
   .filter:hover {
     color: var(--text);
-    border-color: var(--border-strong);
   }
   .filter[aria-pressed='true'] {
-    color: var(--on-accent);
-    background: var(--accent);
-    border-color: transparent;
+    color: var(--accent-ink);
+    text-decoration-color: var(--underline);
   }
-  .count {
-    font: 500 0.75rem/1 var(--font-mono);
-    opacity: 0.75;
+  sup {
+    margin-left: 3px;
+    font-size: 0.68em;
+    color: var(--faint);
   }
   .grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: clamp(14px, 2vw, 22px);
+    gap: clamp(14px, 2vw, 20px);
   }
   @media (max-width: 1023px) {
     .grid {

@@ -1,7 +1,7 @@
 {
   "prompt": "$ whoami",
   "greeting": "Hi, I'm Amr.",
-  "headline": "I design systems that scale — and the pipelines that ship them.",
+  "headline": "I design systems that *scale* — and the pipelines that *ship* them.",
   "intro": "From the first line of code to the last packet through the load balancer, I care about the whole journey: architecture, infrastructure, delivery, and the product people actually use.",
   "roles": ["DevOps Engineer", "Cloud Solutions Architect", "System Designer", "App & Web Developer"],
   "primaryCta": { "label": "See my work", "href": "/#projects" },

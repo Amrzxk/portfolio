@@ -40,7 +40,7 @@ collections:
           - { name: name, label: Your name, widget: string }
           - { name: role, label: Headline role, widget: string, hint: 'Shown in titles, e.g. "DevOps & Cloud Engineer".' }
           - { name: siteUrl, label: Site URL, widget: string, hint: 'Your public address, e.g. https://amr.amrzakariya2020.workers.dev — used for SEO, sitemap and RSS.' }
-          - { name: accent, label: Accent colour, widget: color, allowInput: true, default: '#22d3ee', hint: 'Buttons, highlights and links use this colour.' }
+          - { name: accent, label: Accent colour, widget: color, allowInput: true, default: '#3ddc84', hint: 'Green by default. Buttons, highlights, the terminal and links use this colour.' }
           - { name: email, label: Public email, widget: string, required: false, hint: 'Shown in the contact section and used as a fallback if the form fails.' }
           - { name: location, label: Location, widget: string, required: false }
           - name: seo
@@ -101,7 +101,7 @@ collections:
         fields:
           - { name: prompt, label: Terminal prompt, widget: string, default: '$ whoami' }
           - { name: greeting, label: Greeting, widget: string, required: false }
-          - { name: headline, label: Big headline, widget: text }
+          - { name: headline, label: Big headline, widget: text, hint: 'Wrap words in *asterisks* to italicise and highlight them.' }
           - { name: intro, label: Intro paragraph, widget: text, required: false }
           - name: roles
             label: Rotating roles (typed effect)
@@ -138,7 +138,7 @@ collections:
         file: content/pages/about.json
         fields:
           - { name: kicker, label: Small label, widget: string, default: About me }
-          - { name: heading, label: Heading, widget: string }
+          - { name: heading, label: Heading, widget: string, hint: 'Wrap words in *asterisks* to italicise and highlight them.' }
           - { name: photo, label: Photo, widget: image, required: false, hint: 'Portrait, ideally 4:5. Leave empty to show your initials.' }
           - { name: body, label: Bio, widget: text, hint: 'Leave a blank line between paragraphs.' }
           - name: highlights

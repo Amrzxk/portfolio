@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Icon from '../../components/Icon.astro';
 import PostCard from '../../components/PostCard.astro';
+import SectionHead from '../../components/SectionHead.astro';
 import { getPosts } from '../../lib/collections';
 import { sectionIntro, sectionTitle } from '../../lib/data';
 
@@ -14,22 +14,20 @@ const tags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
 <Base title={title} description={intro || `Articles and notes — ${title}`}>
   <section class="page">
     <div class="container">
-      <a class="back" href="/"><Icon name="back" size={16} /> Home</a>
-      <header class="section-head">
-        <p class="kicker">~/blog</p>
-        <h1>{title}</h1>
-        {intro && <p>{intro}</p>}
-        <a class="link rss" href="/rss.xml"><Icon name="rss" size={16} /> RSS feed</a>
-      </header>
+      <a class="back mono" href="/">← home</a>
+      <SectionHead kicker={`${String(posts.length).padStart(2, '0')} · blog`} title={title} intro={intro}>
+        <a class="u rss mono" href="/rss.xml">subscribe via rss</a>
+      </SectionHead>
 
       {
         tags.length > 1 && (
-          <div class="tags" role="group" aria-label="Filter by tag" data-tags>
-            <button type="button" class="chip tag" aria-pressed="true" data-tag="">
+          <div class="tags mono" role="group" aria-label="Filter by tag" data-tags>
+            <span class="faint">tags:</span>
+            <button type="button" class="tag" aria-pressed="true" data-tag="">
               all
             </button>
             {tags.map((t) => (
-              <button type="button" class="chip tag" aria-pressed="false" data-tag={t}>
+              <button type="button" class="tag" aria-pressed="false" data-tag={t}>
                 #{t}
               </button>
             ))}
@@ -39,7 +37,7 @@ const tags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
 
       {
         posts.length ? (
-          <div class="grid">
+          <div class="list">
             {posts.map((p, i) => (
               <div data-post-tags={p.data.tags.join(' ')}>
                 <PostCard post={p} index={i} headingLevel="h2" />
@@ -61,48 +59,49 @@ const tags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
   .back {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
     min-height: 44px;
+    margin-bottom: 16px;
+    font-size: 0.8rem;
     color: var(--muted);
-    font-size: 0.92rem;
-    margin-bottom: 20px;
   }
   .back:hover {
     color: var(--accent-ink);
   }
-  h1 {
-    font-size: clamp(2.2rem, 3.4vw + 1rem, 3.4rem);
-  }
   .rss {
-    margin-top: 16px;
-    font-size: 0.9rem;
+    display: inline-block;
+    margin-top: 14px;
+    font-size: 0.78rem;
+    color: var(--muted);
   }
   .tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 28px;
+    align-items: center;
+    gap: 4px 16px;
+    margin-bottom: 20px;
+    font-size: 0.8rem;
   }
   .tag {
+    min-height: 40px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--muted);
+    font: inherit;
     cursor: pointer;
-    min-height: 36px;
-    padding-inline: 14px;
-    font-size: 0.82rem;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 6px;
   }
   .tag[aria-pressed='true'] {
-    color: var(--on-accent);
-    background: var(--accent);
-    border-color: transparent;
+    color: var(--accent-ink);
+    text-decoration-color: var(--underline);
   }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
-    gap: clamp(14px, 2vw, 22px);
+  .list {
+    border-top: 1px solid var(--border);
   }
-  .grid > div {
-    display: grid;
-  }
-  .grid > div[hidden] {
+  .list > div[hidden] {
     display: none;
   }
 </style>

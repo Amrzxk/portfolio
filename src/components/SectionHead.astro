@@ -1,26 +1,62 @@
 ---
+import { emphasize } from '../lib/format';
+
 interface Props {
+  /** "01 · story" → index "01", label "story" */
   kicker: string;
   title: string;
   intro?: string;
-  align?: 'left' | 'center';
 }
-const { kicker, title, intro, align = 'left' } = Astro.props;
+const { kicker, title, intro } = Astro.props;
+const [idx, label] = kicker.includes(' · ') ? kicker.split(' · ') : ['', kicker];
 ---
 
-<header class:list={['section-head', 'reveal', { center: align === 'center' }]}>
-  <p class="kicker">{kicker}</p>
-  <h2>{title}</h2>
-  {intro && <p>{intro}</p>}
-  <slot />
+<header class="sh reveal">
+  <p class="sh-meta mono">
+    {idx && <span class="idx">{idx}</span>}
+    <span>/{label}</span>
+  </p>
+  <div class="sh-main">
+    <h2 set:html={emphasize(title)} />
+    {intro && <p class="lede">{intro}</p>}
+    <slot />
+  </div>
 </header>
 
 <style>
-  .center {
-    margin-inline: auto;
-    text-align: center;
+  .sh {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 12px 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    margin-bottom: clamp(40px, 6vw, 72px);
   }
-  .center .kicker {
-    justify-content: center;
+  .sh-meta {
+    display: flex;
+    gap: 12px;
+    padding-top: 0.55em;
+    font-size: 0.78rem;
+    color: var(--faint);
+  }
+  .idx {
+    color: var(--accent-ink);
+  }
+  h2 {
+    font-size: clamp(2.4rem, 3.8vw + 1rem, 4.2rem);
+  }
+  .lede {
+    margin-top: 16px;
+    max-width: 58ch;
+    color: var(--muted);
+    font-size: clamp(1rem, 0.3vw + 0.96rem, 1.1rem);
+  }
+  @media (max-width: 759px) {
+    .sh {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .sh-meta {
+      padding-top: 0;
+    }
   }
 </style>

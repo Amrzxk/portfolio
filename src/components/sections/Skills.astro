@@ -8,7 +8,7 @@ interface Props {
   kicker: string;
 }
 const { title, kicker } = Astro.props;
-const levelText = ['', 'Familiar', 'Working knowledge', 'Proficient', 'Advanced', 'Expert'];
+const levelText = ['', 'familiar', 'working knowledge', 'proficient', 'advanced', 'expert'];
 ---
 
 <section id="skills" class="section">
@@ -18,21 +18,18 @@ const levelText = ['', 'Familiar', 'Working knowledge', 'Proficient', 'Advanced'
     <div class="domains">
       {
         skills.domains.map((d, i) => (
-          <article class="card card-hover domain reveal" style={`--d:${i}`}>
+          <article class="domain reveal" style={`--d:${i}`}>
             <header>
-              <span class="domain-icon">
-                <Icon name={d.icon} size={22} />
-              </span>
-              <div>
-                <h3>{d.name}</h3>
-                {d.summary && <p class="muted">{d.summary}</p>}
-              </div>
+              <span class="mono idx">{String(i + 1).padStart(2, '0')}</span>
+              <Icon name={d.icon} size={18} class="ic" />
+              <h3>{d.name}</h3>
             </header>
-            <ul class="skill-list">
+            {d.summary && <p class="sum">{d.summary}</p>}
+            <ul class="list">
               {d.skills.map((s) => (
                 <li>
                   <span>{s.name}</span>
-                  <span class="meter" role="img" aria-label={`${levelText[s.level]} (${s.level} of 5)`} title={levelText[s.level]}>
+                  <span class="meter mono" role="img" aria-label={`${levelText[s.level]}, ${s.level} of 5`} title={levelText[s.level]}>
                     {[1, 2, 3, 4, 5].map((n) => (
                       <i class:list={{ on: n <= s.level }} />
                     ))}
@@ -47,18 +44,15 @@ const levelText = ['', 'Familiar', 'Working knowledge', 'Proficient', 'Advanced'
 
     {
       skills.toolbelt.length > 0 && (
-        <div class="toolbelt reveal" aria-label="Other tools I use">
-          <p class="toolbelt-label mono">// also in the toolbelt</p>
-          <div class="marquee">
-            <ul class="track">
-              {[...skills.toolbelt, ...skills.toolbelt].map((t, i) => (
-                <li class="chip" aria-hidden={i >= skills.toolbelt.length ? 'true' : undefined}>
-                  {t}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        <p class="tools mono reveal">
+          <span class="faint">also in the toolbelt —</span>
+          {skills.toolbelt.map((t, i) => (
+            <>
+              <span class="tool">{t}</span>
+              {i < skills.toolbelt.length - 1 && <span class="sep" aria-hidden="true">/</span>}
+            </>
+          ))}
+        </p>
       )
     }
   </div>
@@ -68,108 +62,79 @@ const levelText = ['', 'Familiar', 'Working knowledge', 'Proficient', 'Advanced'
   .domains {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(14px, 2vw, 22px);
+    border-top: 1px solid var(--border);
+    border-left: 1px solid var(--border);
   }
-  .domain header {
+  .domain {
+    padding: clamp(20px, 3vw, 32px);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    transition: background-color 0.3s;
+  }
+  .domain:hover {
+    background: var(--surface);
+  }
+  header {
     display: flex;
-    gap: 16px;
-    align-items: flex-start;
-    margin-bottom: 22px;
+    align-items: center;
+    gap: 12px;
   }
-  .domain-icon {
-    display: grid;
-    place-items: center;
-    flex: none;
-    width: 46px;
-    height: 46px;
-    border-radius: 12px;
-    background: var(--accent-soft);
+  .idx {
+    font-size: 0.74rem;
+    color: var(--faint);
+  }
+  header :global(.ic) {
     color: var(--accent-ink);
-    border: 1px solid color-mix(in oklab, var(--accent) 30%, transparent);
   }
-  .domain h3 {
-    font-size: 1.25rem;
+  h3 {
+    font-size: 1.12rem;
+    font-weight: 600;
   }
-  .domain header p {
-    margin-top: 4px;
-    font-size: 0.94rem;
+  .sum {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 0.95rem;
   }
-  .skill-list {
-    display: grid;
-    gap: 2px;
+  .list {
+    margin-top: 20px;
   }
-  .skill-list li {
+  .list li {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 16px;
     padding: 9px 0;
     border-top: 1px dashed var(--border);
-    font-size: 0.95rem;
+    font-size: 0.94rem;
   }
   .meter {
     display: inline-flex;
-    gap: 4px;
+    gap: 3px;
     flex: none;
   }
   .meter i {
-    width: 14px;
-    height: 6px;
-    border-radius: 3px;
+    width: 7px;
+    height: 12px;
     background: var(--border-strong);
   }
   .meter i.on {
-    background: var(--accent);
+    background: var(--accent-ink);
   }
-
-  .toolbelt {
-    margin-top: clamp(32px, 5vw, 48px);
-  }
-  .toolbelt-label {
-    font-size: 0.82rem;
-    color: var(--faint);
-    margin-bottom: 14px;
-  }
-  .marquee {
-    overflow: hidden;
-    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-  }
-  .track {
+  .tools {
     display: flex;
-    gap: 10px;
-    width: max-content;
-    animation: scroll 40s linear infinite;
+    flex-wrap: wrap;
+    gap: 6px 10px;
+    margin-top: 28px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.8;
   }
-  .marquee:hover .track {
-    animation-play-state: paused;
+  .sep {
+    color: var(--border-strong);
   }
-  .track .chip {
-    font-size: 0.85rem;
-    padding: 8px 14px;
-  }
-  @keyframes scroll {
-    to {
-      transform: translateX(calc(-50% - 5px));
-    }
-  }
-  @media (max-width: 759px) {
+  @media (max-width: 799px) {
     .domains {
       grid-template-columns: minmax(0, 1fr);
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .marquee {
-      mask-image: none;
-      -webkit-mask-image: none;
-    }
-    .track {
-      flex-wrap: wrap;
-      width: auto;
-      animation: none;
-    }
-    .track [aria-hidden='true'] {
-      display: none;
     }
   }
 </style>

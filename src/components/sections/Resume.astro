@@ -1,46 +1,48 @@
 ---
-import Icon from '../Icon.astro';
-import { resume } from '../../lib/data';
+import SectionHead from '../SectionHead.astro';
+import { resume, site } from '../../lib/data';
 
 interface Props {
   title: string;
   kicker: string;
 }
 const { title, kicker } = Astro.props;
+const user = (site.name.split(' ')[0] || 'me').toLowerCase();
+const fileName = resume.file.split('/').pop() || 'resume.pdf';
 ---
 
 {
   resume.file && (
-    <section id="resume" class="section resume-section">
+    <section id="resume" class="section">
       <div class="container">
-        <div class="band reveal">
-          <div class="copy">
-            <p class="kicker">{kicker}</p>
-            <h2>{title}</h2>
-            {resume.intro && <p class="intro">{resume.intro}</p>}
-            {resume.points.length > 0 && (
-              <ul class="points">
-                {resume.points.map((p) => (
-                  <li>
-                    <Icon name="check" size={16} />
-                    {p}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-          <div class="actions">
-            <span class="file-icon" aria-hidden="true">
-              <Icon name="file" size={40} />
-            </span>
-            <a class="btn btn-primary" href={resume.file} download>
-              <Icon name="download" size={18} />
-              {resume.buttonLabel}
+        <SectionHead kicker={kicker} title={title} intro={resume.intro} />
+        <div class="wrap reveal">
+          {resume.points.length > 0 && (
+            <ul class="points">
+              {resume.points.map((p) => (
+                <li>{p}</li>
+              ))}
+            </ul>
+          )}
+          <div class="file">
+            <p class="cmd mono">
+              <span class="g">$</span> ls -l ~/documents
+            </p>
+            <a class="row mono" href={resume.file} download>
+              <span class="perm">-rw-r--r--</span>
+              <span class="own">{user}</span>
+              <span class="date">{resume.updated || ''}</span>
+              <span class="name">{fileName}</span>
+              <span class="dl">↓</span>
             </a>
-            <a class="view" href={resume.file} target="_blank" rel="noopener">
-              or view it in your browser
-            </a>
-            {resume.updated && <p class="updated mono">Last updated · {resume.updated}</p>}
+            <div class="actions">
+              <a class="btn btn-primary" href={resume.file} download>
+                {resume.buttonLabel} <span class="arr" aria-hidden="true">↓</span>
+              </a>
+              <a class="u view mono" href={resume.file} target="_blank" rel="noopener">
+                open in browser ↗
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -49,74 +51,100 @@ const { title, kicker } = Astro.props;
 }
 
 <style>
-  .band {
+  .wrap {
     display: grid;
-    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-    gap: clamp(28px, 5vw, 56px);
-    align-items: center;
-    padding: clamp(28px, 5vw, 56px);
-    border-radius: calc(var(--radius) + 6px);
-    border: 1px solid color-mix(in oklab, var(--accent) 30%, var(--border));
-    background:
-      radial-gradient(ellipse at 100% 0%, var(--accent-glow), transparent 55%),
-      var(--surface);
-  }
-  h2 {
-    font-size: clamp(1.8rem, 2.2vw + 1rem, 2.6rem);
-  }
-  .intro {
-    margin-top: 14px;
-    color: var(--muted);
-    max-width: 56ch;
-  }
-  .points {
-    display: grid;
-    gap: 10px;
-    margin-top: 20px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    gap: clamp(24px, 4vw, 56px);
+    margin-left: 224px;
+    align-items: start;
   }
   .points li {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    font-size: 0.96rem;
+    position: relative;
+    padding: 12px 0 12px 24px;
+    border-bottom: 1px solid var(--border);
   }
-  .points :global(svg) {
+  .points li:first-child {
+    border-top: 1px solid var(--border);
+  }
+  .points li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
     color: var(--accent-ink);
-    flex: none;
+  }
+  .file {
+    padding: 20px 22px 22px;
+    border-radius: var(--radius);
+    background: var(--term-bg);
+    border: 1px solid var(--term-border);
+    color: var(--term-text);
+    box-shadow: var(--term-shadow);
+  }
+  .cmd {
+    font-size: 0.8rem;
+    color: var(--term-dim);
+  }
+  .g {
+    color: var(--accent);
+  }
+  .row {
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr) auto auto;
+    gap: 14px;
+    align-items: center;
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    color: var(--term-text);
+    background: color-mix(in oklab, var(--accent) 7%, transparent);
+    border: 1px dashed color-mix(in oklab, var(--accent) 30%, transparent);
+    transition: background-color 0.2s;
+  }
+  .row:hover {
+    background: color-mix(in oklab, var(--accent) 14%, transparent);
+  }
+  .perm,
+  .date {
+    color: var(--term-dim);
+  }
+  .name {
+    color: var(--accent);
+  }
+  .dl {
+    color: var(--accent);
   }
   .actions {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 14px;
-    text-align: center;
+    gap: 16px 22px;
+    margin-top: 22px;
   }
-  .file-icon {
-    display: grid;
-    place-items: center;
-    width: 84px;
-    height: 84px;
-    border-radius: 22px;
-    background: var(--accent-soft);
-    color: var(--accent-ink);
-    border: 1px solid color-mix(in oklab, var(--accent) 30%, transparent);
+  :root[data-theme='light'] .file .btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
   }
   .view {
-    color: var(--muted);
-    font-size: 0.9rem;
-    text-decoration: underline;
-    text-underline-offset: 3px;
+    font-size: 0.8rem;
+    color: var(--term-text);
   }
-  .view:hover {
-    color: var(--text);
+  @media (max-width: 959px) {
+    .wrap {
+      margin-left: 0;
+    }
   }
-  .updated {
-    font-size: 0.75rem;
-    color: var(--faint);
-  }
-  @media (max-width: 759px) {
-    .band {
+  @media (max-width: 699px) {
+    .wrap {
       grid-template-columns: minmax(0, 1fr);
+    }
+    .perm,
+    .own {
+      display: none;
+    }
+    .row {
+      grid-template-columns: auto minmax(0, 1fr) auto;
     }
   }
 </style>

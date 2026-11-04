@@ -1,5 +1,4 @@
 ---
-import Icon from '../Icon.astro';
 import PostCard from '../PostCard.astro';
 import SectionHead from '../SectionHead.astro';
 import { getPosts } from '../../lib/collections';
@@ -18,36 +17,31 @@ const latest = posts.slice(0, 3);
   latest.length > 0 && (
     <section id="blog" class="section">
       <div class="container">
-        <div class="head-row">
-          <SectionHead kicker={kicker} title={title} intro={sectionIntro('blog')} />
-          <a class="btn all reveal" href="/blog/">
-            All posts <Icon name="arrow" size={16} />
-          </a>
-        </div>
-        <div class="grid">
+        <SectionHead kicker={kicker} title={title} intro={sectionIntro('blog')} />
+        <div class="list">
           {latest.map((p, i) => (
             <PostCard post={p} index={i} />
           ))}
         </div>
+        <a class="link all reveal" href="/blog/">
+          all posts ({posts.length}) <span class="arr" aria-hidden="true">→</span>
+        </a>
       </div>
     </section>
   )
 }
 
 <style>
-  .head-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 0 24px;
+  .list {
+    border-top: 1px solid var(--border);
   }
   .all {
-    margin-bottom: clamp(32px, 5vw, 56px);
+    margin-top: 24px;
+    margin-left: 224px;
   }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
-    gap: clamp(14px, 2vw, 22px);
+  @media (max-width: 759px) {
+    .all {
+      margin-left: 0;
+    }
   }
 </style>

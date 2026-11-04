@@ -1,0 +1,726 @@
+---
+/**
+ * Interactive terminal for the hero. Every answer it gives comes from the
+ * CMS content, so editing the admin updates the terminal too.
+ */
+import { about, certifications, experience, isEnabled, resume, site, skills, story } from '../lib/data';
+import { getProjects } from '../lib/collections';
+import { plain } from '../lib/format';
+
+const user = (site.name.split(' ')[0] || 'me').toLowerCase().replace(/[^a-z0-9]/g, '') || 'me';
+const projects = await getProjects();
+
+const data = {
+  user,
+  name: site.name,
+  role: site.role,
+  location: site.location,
+  email: site.email,
+  roles: story.roles,
+  headline: plain(story.headline),
+  stats: story.stats,
+  available: about.availability.open,
+  availability: about.availability.text,
+  about: about.body.split(/\n\s*\n/)[0]?.trim() ?? '',
+  highlights: about.highlights,
+  skills: skills.domains.map((d) => ({ name: d.name, items: d.skills.map((s) => [s.name, s.level]) })),
+  tools: skills.toolbelt,
+  projects: projects.map((p) => ({ id: p.id, title: p.data.title, summary: p.data.summary })),
+  experience: experience.items.map((j) => ({
+    role: j.role,
+    company: j.company,
+    when: `${j.start} — ${j.current ? 'now' : j.end || 'now'}`,
+  })),
+  certs: certifications.items.map((c) => ({ name: c.name, issuer: c.issuer, date: c.date })),
+  socials: site.socials.map((s) => ({ label: s.label, url: s.url })),
+  resume: isEnabled('resume') ? resume.file : '',
+  sections: site.sections.filter((s) => s.enabled && s.id !== 'hero').map((s) => s.id),
+};
+const json = JSON.stringify(data).replace(/</g, '\\u003c');
+---
+
+<div class="term-wrap">
+  <div class="term" data-term>
+    <div class="term-bar mono">
+      <span class="tb-left"><span class="tb-dot"></span>{user}@portfolio: ~</span>
+      <span class="tb-right">zsh — 80×24</span>
+    </div>
+
+    <div class="term-screen mono" data-screen>
+      <div class="term-out" data-out role="log" aria-label="Terminal output">
+        <!-- Shown without JavaScript; replaced by the boot sequence when JS runs. -->
+        <p class="ln"><span class="pr"><span class="g">{user}@portfolio</span><span class="d">:</span>~<span class="d">$</span></span> whoami</p>
+        <p class="ln"><span class="w">{site.name}</span> <span class="d">—</span> {site.role}</p>
+      </div>
+      <form class="term-line" data-form autocomplete="off">
+        <label for="term-input" class="pr"><span class="g">{user}@portfolio</span><span class="d">:</span>~<span class="d">$</span></label>
+        <input
+          id="term-input"
+          data-in
+          type="text"
+          autocomplete="off"
+          autocapitalize="off"
+          autocorrect="off"
+          spellcheck="false"
+          enterkeyhint="send"
+          aria-label="Type a command, for example help"
+        />
+      </form>
+    </div>
+
+    <div class="term-status mono" aria-hidden="true">
+      <span class="ts-a">[portfolio]</span>
+      <span class="ts-b">0:zsh*</span>
+      <span class="ts-gap"></span>
+      <span class="ts-c" data-load>load 0.42</span>
+      <span class="ts-a" data-clock>--:--</span>
+    </div>
+  </div>
+
+  <div class="hints mono">
+    <span class="faint">try</span>
+    <button type="button" data-cmd="help">help</button>
+    <button type="button" data-cmd="neofetch">neofetch</button>
+    <button type="button" data-cmd="projects">projects</button>
+    <button type="button" data-cmd="sudo hire-me">sudo hire-me</button>
+  </div>
+</div>
+
+<script type="application/json" id="term-data" set:html={json} />
+
+<style>
+  .term-wrap {
+    min-width: 0;
+  }
+  .term {
+    position: relative;
+    border-radius: 8px;
+    border: 1px solid var(--term-border);
+    background: var(--term-bg);
+    color: var(--term-text);
+    box-shadow: var(--term-shadow);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  /* CRT scanlines + soft vignette */
+  .term::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background:
+      repeating-linear-gradient(to bottom, rgb(255 255 255 / 0.022) 0 1px, transparent 1px 3px),
+      radial-gradient(ellipse 120% 90% at 50% 40%, transparent 60%, rgb(0 0 0 / 0.45));
+  }
+  .term-bar {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 14px;
+    background: var(--term-bar);
+    border-bottom: 1px solid var(--term-border);
+    font-size: 0.72rem;
+    color: var(--term-dim);
+  }
+  .tb-left {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--term-text);
+  }
+  .tb-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+  }
+  .term-screen {
+    height: clamp(300px, 42vh, 400px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 16px 18px 12px;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    cursor: text;
+    scrollbar-width: thin;
+    scrollbar-color: var(--term-border) transparent;
+  }
+  .term-out :global(.ln) {
+    margin: 0;
+    min-height: 1.7em;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .term-out :global(.g),
+  .term-line :global(.g) {
+    color: var(--accent);
+    text-shadow: 0 0 10px color-mix(in oklab, var(--accent) 45%, transparent);
+  }
+  .term-out :global(.d),
+  .term-line :global(.d) {
+    color: var(--term-dim);
+  }
+  .term-out :global(.w) {
+    color: var(--term-white);
+  }
+  .term-out :global(.y) {
+    color: #e3c26f;
+  }
+  .term-out :global(.e) {
+    color: #ff7b72;
+  }
+  .term-out :global(a) {
+    color: var(--term-white);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in oklab, var(--accent) 55%, transparent);
+    text-underline-offset: 3px;
+  }
+  .term-out :global(a:hover) {
+    color: var(--accent);
+  }
+  .term-out :global(.grid) {
+    display: grid;
+    grid-template-columns: minmax(9ch, max-content) minmax(0, 1fr);
+    column-gap: 2.5ch;
+  }
+  .term-out :global(.bars) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) max-content;
+    column-gap: 2ch;
+    max-width: 46ch;
+  }
+  .term-out :global(.fetch) {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    column-gap: 3ch;
+    align-items: start;
+    margin: 4px 0;
+  }
+  .term-out :global(.fetch pre) {
+    margin: 0;
+    font: inherit;
+    line-height: 1.25;
+    color: var(--accent);
+  }
+  .term-line {
+    display: flex;
+    gap: 1ch;
+    align-items: baseline;
+  }
+  .pr {
+    flex: none;
+    white-space: nowrap;
+  }
+  .term-line input {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--term-white);
+    font: inherit;
+    caret-color: var(--accent);
+  }
+  .term-status {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    font-size: 0.7rem;
+    line-height: 1;
+    background: var(--accent);
+    color: var(--on-accent);
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .term-status span {
+    padding: 5px 10px;
+  }
+  .ts-a {
+    font-weight: 500;
+  }
+  .ts-b {
+    background: color-mix(in oklab, var(--accent) 75%, #000);
+  }
+  .ts-gap {
+    flex: 1;
+  }
+  .ts-c {
+    opacity: 0.75;
+  }
+
+  .hints {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 8px;
+    margin-top: 14px;
+    font-size: 0.75rem;
+  }
+  .hints button {
+    min-height: 34px;
+    padding: 0 10px;
+    border-radius: 3px;
+    border: 1px dashed var(--border-strong);
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    cursor: pointer;
+    transition:
+      color 0.2s,
+      border-color 0.2s;
+  }
+  .hints button:hover {
+    color: var(--accent-ink);
+    border-color: var(--accent-ink);
+    border-style: solid;
+  }
+
+  @media (max-width: 599px) {
+    .term-screen {
+      font-size: 0.78rem;
+      padding: 14px 14px 10px;
+    }
+    .term-line input {
+      font-size: 16px; /* stops iOS zooming on focus */
+    }
+    .tb-right,
+    .ts-c {
+      display: none;
+    }
+    .term-out :global(.fetch pre) {
+      display: none;
+    }
+    .term-out :global(.fetch) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>
+
+<script>
+  type Data = {
+    user: string;
+    name: string;
+    role: string;
+    location: string;
+    email: string;
+    roles: string[];
+    headline: string;
+    stats: { value: string; label: string }[];
+    available: boolean;
+    availability: string;
+    about: string;
+    highlights: string[];
+    skills: { name: string; items: [string, number][] }[];
+    tools: string[];
+    projects: { id: string; title: string; summary: string }[];
+    experience: { role: string; company: string; when: string }[];
+    certs: { name: string; issuer: string; date: string }[];
+    socials: { label: string; url: string }[];
+    resume: string;
+    sections: string[];
+  };
+
+  const root = document.querySelector<HTMLElement>('[data-term]');
+  const dataEl = document.getElementById('term-data');
+  if (root && dataEl) {
+    const D = JSON.parse(dataEl.textContent || '{}') as Data;
+    const screen = root.querySelector<HTMLElement>('[data-screen]')!;
+    const out = root.querySelector<HTMLElement>('[data-out]')!;
+    const form = root.querySelector<HTMLFormElement>('[data-form]')!;
+    const input = root.querySelector<HTMLInputElement>('[data-in]')!;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const finePointer = window.matchMedia('(pointer: fine)').matches;
+
+    // ───────── output helpers (DOM only — never innerHTML with content) ─────────
+    type Part = string | Node;
+    const span = (text: string, cls = '') => {
+      const s = document.createElement('span');
+      if (cls) s.className = cls;
+      s.textContent = text;
+      return s;
+    };
+    const link = (text: string, href: string) => {
+      const a = document.createElement('a');
+      a.textContent = text;
+      a.href = href;
+      if (/^https?:/.test(href)) {
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+      }
+      return a;
+    };
+    const el = (cls: string, parts: Part[]) => {
+      const d = document.createElement('div');
+      d.className = cls;
+      parts.forEach((p) => d.append(p));
+      return d;
+    };
+    const line = (...parts: Part[]) => {
+      const p = document.createElement('p');
+      p.className = 'ln';
+      parts.forEach((x) => p.append(x));
+      return p;
+    };
+    const print = (...nodes: Node[]) => {
+      nodes.forEach((n) => out.append(n));
+      while (out.childNodes.length > 400) out.firstChild?.remove();
+      screen.scrollTop = screen.scrollHeight;
+    };
+    const blank = () => line('');
+    const prompt = () => {
+      const s = document.createElement('span');
+      s.className = 'pr';
+      s.append(span(`${D.user}@portfolio`, 'g'), span(':', 'd'), '~', span('$', 'd'), ' ');
+      return s;
+    };
+    const bar = (n: number) => '█'.repeat(n) + '░'.repeat(5 - n);
+    const scrollToSection = (id: string) => {
+      const target = id ? document.getElementById(id) : null;
+      if (target) target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+      else window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    };
+
+    // ───────── commands ─────────
+    type Cmd = { desc: string; run: (args: string[]) => void; hidden?: boolean };
+    const files: Record<string, string> = {
+      'about.txt': 'about',
+      'skills.txt': 'skills',
+      'experience.log': 'experience',
+      'certs.txt': 'certs',
+      'contact.sh': 'contact',
+    };
+
+    const C: Record<string, Cmd> = {
+      help: {
+        desc: 'list available commands',
+        run: () => {
+          print(line(span('available commands', 'd')));
+          const g = el(
+            'ln grid',
+            Object.entries(C)
+              .filter(([, c]) => !c.hidden)
+              .flatMap(([k, c]) => [span(k, 'g'), span(c.desc)]),
+          );
+          print(g, line(span('tip: ↑/↓ history · tab completes · ctrl+l clears', 'd')));
+        },
+      },
+      whoami: {
+        desc: 'who is this?',
+        run: () => {
+          print(line(span(D.name, 'w'), span(' — ', 'd'), D.role));
+          if (D.location) print(line(span('loc  ', 'd'), D.location));
+          if (D.availability) print(line(span('stat ', 'd'), span(D.available ? '● ' : '○ ', D.available ? 'g' : 'd'), D.availability));
+        },
+      },
+      about: { desc: 'a short bio', run: () => print(line(D.about)) },
+      skills: {
+        desc: 'what I work with',
+        run: (args) => {
+          const short = args.includes('--short') || args.includes('-s');
+          D.skills.forEach((d, i) => {
+            if (i) print(blank());
+            print(line(span('▸ ', 'g'), span(d.name, 'w')));
+            if (short) {
+              print(line(span(d.items.map((x) => x[0]).join(' · '), 'd')));
+              return;
+            }
+            print(el('ln bars', d.items.flatMap(([n, l]) => [span(`  ${n}`), span(bar(l), 'g')])));
+          });
+          if (D.tools.length) print(blank(), line(span('also: ', 'd'), D.tools.join(', ')));
+        },
+      },
+      projects: {
+        desc: 'selected work',
+        run: () => {
+          D.projects.forEach((p, i) => {
+            print(line(span(`[${String(i + 1).padStart(2, '0')}] `, 'g'), link(p.title, `/projects/${p.id}/`)));
+            print(line(span(`     ${p.summary}`, 'd')));
+          });
+          print(line(span('run ', 'd'), span('open <n>', 'g'), span(' to read a case study', 'd')));
+        },
+      },
+      open: {
+        desc: 'open a project — open 1',
+        run: ([arg]) => {
+          const n = Number(arg);
+          const p = Number.isInteger(n) && n > 0 ? D.projects[n - 1] : D.projects.find((x) => x.id === arg);
+          if (!p) return print(line(span(`open: no project "${arg ?? ''}" — try `, 'e'), span('projects', 'g')));
+          print(line(span('→ opening ', 'd'), span(p.title, 'w'), span(' …', 'd')));
+          setTimeout(() => (location.href = `/projects/${p.id}/`), 450);
+        },
+      },
+      experience: {
+        desc: 'where I have worked',
+        run: () =>
+          print(el('ln grid', D.experience.flatMap((j) => [span(j.when, 'd'), span(`${j.role} @ ${j.company}`)]))),
+      },
+      certs: {
+        desc: 'certifications',
+        run: () => D.certs.forEach((c) => print(line(span('✓ ', 'g'), c.name, span(`  ${c.issuer}${c.date ? ' · ' + c.date : ''}`, 'd')))),
+      },
+      contact: {
+        desc: 'get in touch',
+        run: () => {
+          if (D.email) print(line(span('mail ', 'd'), link(D.email, `mailto:${D.email}`)));
+          D.socials
+            .filter((s) => !s.url.startsWith('mailto:'))
+            .forEach((s) => print(line(span(`${s.label.toLowerCase().padEnd(4).slice(0, 4)} `, 'd'), link(s.url.replace(/^https?:\/\/(www\.)?/, ''), s.url))));
+          if (D.sections.includes('contact')) {
+            const a = link('jump to the contact form ↓', '#contact');
+            a.addEventListener('click', (e) => {
+              e.preventDefault();
+              scrollToSection('contact');
+            });
+            print(line(span('form ', 'd'), a));
+          }
+        },
+      },
+      resume: {
+        desc: 'download my résumé',
+        run: () => {
+          if (!D.resume) return print(line(span('resume: not available right now', 'e')));
+          const a = link('resume.pdf', D.resume);
+          a.setAttribute('download', '');
+          print(line(span('-rw-r--r--  1 ' + D.user + '  staff  ', 'd'), a, span('  ↓ click to download', 'd')));
+        },
+      },
+      neofetch: {
+        desc: 'system info, but it is me',
+        run: () => {
+          const art = document.createElement('pre');
+          art.textContent = [' ┌─────────┐', ' │ >_      │', ' │         │', ' │   ' + (D.name[0] || '?') + '     │', ' └──┬───┬──┘', '  ──┴───┴──'].join('\n');
+          const info: Part[] = [];
+          const row = (k: string, v: string) => info.push(line(span(k.padEnd(9), 'g'), v));
+          info.push(line(span(`${D.user}@portfolio`, 'g')), line(span('─'.repeat(D.user.length + 10), 'd')));
+          row('role', D.role);
+          if (D.location) row('location', D.location);
+          D.stats.slice(0, 3).forEach((s) => row(s.label.split(' ')[0].toLowerCase(), s.value + ' ' + s.label.split(' ').slice(1).join(' ')));
+          row('stack', D.skills.map((s) => s.name).join(', '));
+          row('shell', 'zsh · astro · cloudflare edge');
+          const swatches = line(...['#050705', '#1c251c', '#5f705c', '#c8d5c4', '#e3c26f', '#ff7b72'].map((c) => {
+            const s = span('███');
+            s.style.color = c;
+            return s;
+          }), span('███', 'g'));
+          info.push(swatches);
+          print(el('fetch', [art, el('', info)]));
+        },
+      },
+      ls: {
+        desc: 'list files',
+        run: () =>
+          print(
+            line(
+              ...Object.keys(files).flatMap((f) => [span(f, f.endsWith('.sh') ? 'g' : 'w'), '   ']),
+              span('projects/', 'y'),
+              D.resume ? '   ' : '',
+              D.resume ? span('resume.pdf', 'w') : '',
+            ),
+          ),
+      },
+      cat: {
+        desc: 'read a file — cat about.txt',
+        run: ([f]) => {
+          if (!f) return print(line(span('usage: cat <file>', 'e')));
+          if (f === 'resume.pdf') return C.resume.run([]);
+          const cmd = files[f];
+          if (!cmd) return print(line(span(`cat: ${f}: No such file or directory`, 'e')));
+          C[cmd].run([]);
+        },
+      },
+      cd: {
+        desc: 'jump to a section — cd skills',
+        run: ([to]) => {
+          const id = (to || '').replace(/^[~/.]+/, '').replace(/\/$/, '');
+          if (!id) {
+            scrollToSection('');
+            return;
+          }
+          const match = D.sections.find((s) => s === id || (id === 'writing' && s === 'blog'));
+          if (!match) {
+            print(line(span(`cd: no such section: ${to}`, 'e')));
+            return print(line(span('sections: ', 'd'), D.sections.join('  ')));
+          }
+          print(line(span('→ /' + match, 'd')));
+          scrollToSection(match);
+        },
+      },
+      theme: {
+        desc: 'switch theme — theme light',
+        run: ([t]) => {
+          const cur = document.documentElement.getAttribute('data-theme');
+          const next = t === 'light' || t === 'dark' ? t : cur === 'light' ? 'dark' : 'light';
+          window.dispatchEvent(new CustomEvent('set-theme', { detail: next }));
+          print(line(span('theme → ', 'd'), span(next, 'g')));
+        },
+      },
+      clear: { desc: 'clear the screen', run: () => out.replaceChildren() },
+      history: {
+        desc: 'previous commands',
+        hidden: true,
+        run: () => hist.forEach((h, i) => print(line(span(String(i + 1).padStart(3) + '  ', 'd'), h))),
+      },
+      echo: { desc: '', hidden: true, run: (a) => print(line(a.join(' '))) },
+      pwd: { desc: '', hidden: true, run: () => print(line(`/home/${D.user}/portfolio`)) },
+      date: { desc: '', hidden: true, run: () => print(line(new Date().toString())) },
+      sudo: {
+        desc: '',
+        hidden: true,
+        run: (a) => {
+          if (a.join(' ').includes('hire')) {
+            print(line(span(`[sudo] password for visitor: `, 'd'), '••••••••'));
+            print(line(span('✓ ', 'g'), span('access granted.', 'w'), ' ' + (D.availability || "Let's talk.")));
+            return C.contact.run([]);
+          }
+          print(line(span('visitor is not in the sudoers file. This incident will be reported.', 'e')));
+          print(line(span('(psst — try ', 'd'), span('sudo hire-me', 'g'), span(')', 'd')));
+        },
+      },
+      rm: {
+        desc: '',
+        hidden: true,
+        run: () => print(line(span('rm: permission denied — this site is rebuilt from git on every deploy', 'e'))),
+      },
+      exit: { desc: '', hidden: true, run: () => print(line(span("there's no exit — only ", 'd'), span('contact', 'g'))) },
+      hello: { desc: '', hidden: true, run: () => print(line('hey 👋 — type ', span('help', 'g'), ' to look around')) },
+    };
+    C.hi = C.hello;
+    C.hire = { desc: '', hidden: true, run: () => C.sudo.run(['hire-me']) };
+    C.fetch = { ...C.neofetch, hidden: true };
+    C.man = { ...C.help, hidden: true };
+
+    // ───────── run / input handling ─────────
+    const hist: string[] = [];
+    let hIdx = 0;
+    let booting = false;
+    let cancelBoot = false;
+
+    const run = (raw: string) => {
+      const cmdline = raw.trim();
+      print(line(prompt(), cmdline));
+      if (!cmdline) return;
+      hist.push(cmdline);
+      hIdx = hist.length;
+      const [name, ...args] = cmdline.split(/\s+/);
+      const cmd = C[name.toLowerCase()];
+      if (cmd) cmd.run(args);
+      else print(line(span(`zsh: command not found: ${name}`, 'e'), span('  — try ', 'd'), span('help', 'g')));
+    };
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (booting) cancelBoot = true;
+      run(input.value);
+      input.value = '';
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowUp' && hist.length) {
+        e.preventDefault();
+        hIdx = Math.max(0, hIdx - 1);
+        input.value = hist[hIdx] ?? '';
+      } else if (e.key === 'ArrowDown' && hist.length) {
+        e.preventDefault();
+        hIdx = Math.min(hist.length, hIdx + 1);
+        input.value = hist[hIdx] ?? '';
+      } else if (e.key === 'Tab' && input.value.trim()) {
+        e.preventDefault();
+        const v = input.value.trimStart();
+        const parts = v.split(/\s+/);
+        if (parts.length === 1) {
+          const m = Object.keys(C).filter((k) => !C[k].hidden && k.startsWith(parts[0]));
+          if (m.length === 1) input.value = m[0] + ' ';
+          else if (m.length > 1) print(line(prompt(), v), line(span(m.join('   '), 'd')));
+        } else {
+          const pool = parts[0] === 'cd' ? D.sections : parts[0] === 'cat' ? [...Object.keys(files), 'resume.pdf'] : parts[0] === 'theme' ? ['light', 'dark'] : [];
+          const m = pool.filter((x) => x.startsWith(parts[1] || ''));
+          if (m.length === 1) input.value = `${parts[0]} ${m[0]}`;
+        }
+      } else if (e.key === 'l' && e.ctrlKey) {
+        e.preventDefault();
+        out.replaceChildren();
+      } else if (e.key === 'c' && e.ctrlKey && !window.getSelection()?.toString()) {
+        print(line(prompt(), input.value + '^C'));
+        input.value = '';
+      }
+    });
+
+    // Click anywhere on the screen focuses the prompt (unless selecting text or clicking a link)
+    screen.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) return;
+      if (window.getSelection()?.toString()) return;
+      input.focus({ preventScroll: true });
+    });
+
+    document.querySelectorAll<HTMLButtonElement>('.hints [data-cmd]').forEach((b) =>
+      b.addEventListener('click', () => {
+        if (booting) cancelBoot = true;
+        run(b.dataset.cmd!);
+        if (finePointer) input.focus({ preventScroll: true });
+      }),
+    );
+
+    // tmux-style clock + a gently wandering load average
+    const clock = root.querySelector<HTMLElement>('[data-clock]');
+    const load = root.querySelector<HTMLElement>('[data-load]');
+    const tick = () => {
+      const d = new Date();
+      if (clock) clock.textContent = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+      if (load) load.textContent = `load ${(0.2 + Math.random() * 0.5).toFixed(2)}`;
+    };
+    tick();
+    setInterval(tick, 15000);
+
+    // ───────── boot sequence ─────────
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    const typeCmd = async (cmd: string) => {
+      const p = line(prompt());
+      const t = document.createTextNode('');
+      const caret = span('▌', 'g');
+      p.append(t, caret);
+      print(p);
+      for (const ch of cmd) {
+        if (cancelBoot) break;
+        t.textContent += ch;
+        await sleep(45 + Math.random() * 55);
+      }
+      caret.remove();
+      t.textContent = cmd;
+      hist.push(cmd);
+      hIdx = hist.length;
+    };
+    const runOutput = (cmd: string) => {
+      const [name, ...args] = cmd.split(' ');
+      C[name].run(args);
+    };
+
+    const boot = async () => {
+      out.replaceChildren();
+      const steps = ['whoami', 'ls'];
+      if (reduce) {
+        steps.forEach((s) => {
+          print(line(prompt(), s));
+          runOutput(s);
+        });
+      } else {
+        booting = true;
+        print(line(span(`last login: ${new Date().toDateString()} on ttys001`, 'd')));
+        await sleep(500);
+        for (const s of steps) {
+          if (cancelBoot) break;
+          await typeCmd(s);
+          if (cancelBoot) break;
+          await sleep(220);
+          runOutput(s);
+          await sleep(650);
+        }
+        booting = false;
+      }
+      if (!cancelBoot) print(blank(), line(span('→ type ', 'd'), span('help', 'g'), span(' or tap a command below', 'd')));
+    };
+    boot();
+  }
+</script>

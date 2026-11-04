@@ -1,6 +1,5 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import Icon from './Icon.astro';
 import { formatDate, readingTime } from '../lib/collections';
 
 interface Props {
@@ -12,51 +11,54 @@ const { post, index = 0, headingLevel: H = 'h3' } = Astro.props;
 const d = post.data;
 ---
 
-<article class="card card-hover post reveal" style={`--d:${index % 3}`}>
-  {d.cover && <img class="cover" src={d.cover} alt="" loading="lazy" decoding="async" />}
+<article class="post reveal" style={`--d:${index % 3}`}>
   <p class="meta mono">
     <time datetime={d.date.toISOString()}>{formatDate(d.date)}</time>
-    <span aria-hidden="true">·</span>
-    <span>{readingTime(post.body)}</span>
+    <span class="rt">{readingTime(post.body)}</span>
   </p>
-  <H class="title"><a href={`/blog/${post.id}/`} class="stretched">{d.title}</a></H>
-  <p class="desc">{d.description}</p>
-  {
-    d.tags.length > 0 && (
-      <ul class="chip-list">
-        {d.tags.map((t) => (
-          <li class="chip">#{t}</li>
-        ))}
-      </ul>
-    )
-  }
-  <span class="link read">Read <Icon name="arrow" size={16} /></span>
+  <div class="main">
+    <H class="title"><a href={`/blog/${post.id}/`} class="stretched">{d.title}</a></H>
+    <p class="desc">{d.description}</p>
+    {d.tags.length > 0 && <p class="tags mono">{d.tags.map((t) => `#${t}`).join('  ')}</p>}
+  </div>
+  <span class="go mono" aria-hidden="true">→</span>
 </article>
 
 <style>
   .post {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .cover {
-    margin: calc(-1 * clamp(20px, 3vw, 28px)) calc(-1 * clamp(20px, 3vw, 28px)) 6px;
-    width: calc(100% + 2 * clamp(20px, 3vw, 28px));
-    max-width: none;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    border-radius: var(--radius) var(--radius) 0 0;
+    position: relative;
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr) 40px;
+    gap: 8px 24px;
+    padding: 26px 0;
     border-bottom: 1px solid var(--border);
   }
   .meta {
-    display: flex;
-    gap: 8px;
+    display: grid;
+    gap: 4px;
+    align-content: start;
+    padding-top: 0.5em;
     font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .rt {
     color: var(--faint);
   }
   .title {
-    font-size: 1.2rem;
-    line-height: 1.3;
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(1.6rem, 1.2vw + 1.1rem, 2.15rem);
+    line-height: 1.1;
+  }
+  .title a {
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 0.18em;
+    transition: text-decoration-color 0.25s;
+  }
+  .post:hover .title a {
+    text-decoration-color: var(--underline);
   }
   .stretched::after {
     content: '';
@@ -64,11 +66,39 @@ const d = post.data;
     inset: 0;
   }
   .desc {
+    margin-top: 10px;
     color: var(--muted);
-    font-size: 0.95rem;
+    max-width: 62ch;
   }
-  .read {
-    margin-top: auto;
-    padding-top: 4px;
+  .tags {
+    margin-top: 10px;
+    font-size: 0.72rem;
+    color: var(--faint);
+  }
+  .go {
+    align-self: center;
+    justify-self: end;
+    color: var(--faint);
+    font-size: 1.1rem;
+    transition:
+      transform 0.3s var(--ease),
+      color 0.3s;
+  }
+  .post:hover .go {
+    color: var(--accent-ink);
+    transform: translateX(4px);
+  }
+  @media (max-width: 759px) {
+    .post {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .meta {
+      display: flex;
+      gap: 12px;
+      padding-top: 0;
+    }
+    .go {
+      display: none;
+    }
   }
 </style>
