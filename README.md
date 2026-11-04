@@ -2,14 +2,14 @@
 
 A personal portfolio for DevOps, system design, cloud solutions and app & web development. It costs **$0/month** to run, and every word is editable from a browser admin panel.
 
-**Stack:** [Astro](https://astro.build) (static) · [Sveltia CMS](https://github.com/sveltia/sveltia-cms) (Git-based admin at `/admin`) · Cloudflare Pages (hosting) · Cloudflare Worker (admin OAuth) · Google Apps Script (contact form → Gmail)
+**Stack:** [Astro](https://astro.build) (static) · [Sveltia CMS](https://github.com/sveltia/sveltia-cms) (Git-based admin at `/admin`) · Cloudflare Workers static assets (hosting) · Cloudflare Worker (admin OAuth) · Google Apps Script (contact form → Gmail)
 
 ➡️ **First-time setup:** see [SETUP.md](SETUP.md).
 
 ## How it works
 
 ```
- You ──► /admin (Sveltia CMS) ──commit──► GitHub repo ──webhook──► Cloudflare Pages build ──► live site
+ You ──► /admin (Sveltia CMS) ──commit──► GitHub repo ──webhook──► Cloudflare Workers build ──► live site
                                             content/*.json, *.md
  Visitor ──► contact form ──POST──► Google Apps Script ──► your Gmail (+ Google Sheet log)
 ```
