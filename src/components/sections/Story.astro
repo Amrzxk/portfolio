@@ -227,16 +227,21 @@ const levels = ['line', 'app', 'system', 'cluster', 'cloud'];
     right: 0;
     bottom: 0;
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateY(14px);
+    /* outgoing text leaves fast… */
     transition:
-      opacity 0.5s var(--ease),
-      transform 0.6s var(--ease);
+      opacity 0.2s ease-out,
+      transform 0.3s ease-out;
     pointer-events: none;
   }
   .zoom.live .chapter.on {
     opacity: 1;
     transform: none;
     pointer-events: auto;
+    /* …incoming text waits for it, so the two never overlap */
+    transition:
+      opacity 0.45s var(--ease) 0.2s,
+      transform 0.6s var(--ease) 0.2s;
   }
   .zoom.live .hud {
     display: grid;
@@ -387,13 +392,36 @@ const levels = ['line', 'app', 'system', 'cluster', 'cloud'];
     stroke-width: 1;
     vector-effect: non-scaling-stroke;
   }
-  .scene :global(.lvl) {
-    transition: opacity 0.4s;
+  .zoom.boot .chapter {
+    transition: none !important;
   }
 
+  /* Wide screens: soft fade behind the text so the scene never fights it */
+  .zoom.live .stage::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(90deg, var(--bg) 0%, color-mix(in oklab, var(--bg) 85%, transparent) 26%, transparent 44%);
+  }
+  .zoom.live .chapters,
+  .zoom.live .hud {
+    z-index: 2;
+  }
+
+  @media (max-width: 1099px) {
+    .zoom.live .stage::before {
+      background: linear-gradient(to top, var(--bg) 0%, color-mix(in oklab, var(--bg) 88%, transparent) 26%, transparent 42%);
+    }
+    .zoom.live .chapters {
+      bottom: 32px;
+      width: min(620px, calc(100% - 2 * var(--gutter)));
+    }
+  }
   @media (max-width: 759px) {
     .zoom.live .chapters {
-      bottom: 28px;
+      bottom: 24px;
     }
     .zoom.live .hud {
       top: calc(var(--nav-h) + 12px);
@@ -403,10 +431,6 @@ const levels = ['line', 'app', 'system', 'cluster', 'cloud'];
     }
     .zoom.live .levels {
       display: none;
-    }
-    .zoom.live .chapter {
-      padding-top: 80px;
-      background: linear-gradient(to bottom, transparent, var(--bg) 70px);
     }
   }
 </style>
@@ -418,69 +442,107 @@ const levels = ['line', 'app', 'system', 'cluster', 'cloud'];
     const svg = root.querySelector<SVGSVGElement>('[data-scene]')!;
     const cam = root.querySelector<SVGGElement>('[data-cam]')!;
     const stage = root.querySelector<HTMLElement>('.stage')!;
+    const chaptersEl = root.querySelector<HTMLElement>('.chapters')!;
     const chapters = [...root.querySelectorAll<HTMLElement>('[data-chapter]')];
     const levelLabels = [...root.querySelectorAll<HTMLElement>('[data-level-label]')];
     const levelGroups = [...root.querySelectorAll<SVGGElement>('[data-lvl]')];
     const scaleEl = root.querySelector<HTMLElement>('[data-scale]')!;
     const barEl = root.querySelector<HTMLElement>('[data-bar]')!;
-    root.classList.add('live');
+    // Switch to pinned mode without animating the chapters from the static list into place.
+    root.classList.add('live', 'boot');
+    requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('boot')));
 
-    // World-space width of each level (line → cloud)
-    const WIDTHS = [14, 44, 260, 580, 1600];
-    let vbW = 1600;
-    let vbH = 1000;
-    let mobile = false;
+    // Chrome renders tiny SVG text blurrily when it is magnified, so draw every
+    // label 100× larger and shrink it back into place. Same position, crisp glyphs.
+    const F = 100;
+    svg.querySelectorAll('text').forEach((t) => {
+      const fs = parseFloat(t.getAttribute('font-size') || '16');
+      const x = parseFloat(t.getAttribute('x') || '0');
+      const y = parseFloat(t.getAttribute('y') || '0');
+      t.setAttribute('font-size', String(fs * F));
+      t.setAttribute('x', String(x * F));
+      t.setAttribute('y', String(y * F));
+      t.setAttribute('transform', `scale(${1 / F})`);
+    });
 
+    // World-space bounds of each level: [x0, y0, x1, y1] — line → app → system → cluster → cloud
+    const B = [
+      [-7.5, -6.5, 7.5, 10.5],
+      [-23, -15, 23, 15],
+      [-135, -40, 135, 92],
+      [-292, -192, 292, 192],
+      [-760, -280, 760, 312],
+    ];
+    const L = B.length;
+
+    // Screen-space "safe area" the scene must fit in (beside or above the chapter text).
+    let W = 0;
+    let H = 0;
+    let safe = { x: 0, y: 0, w: 1, h: 1 };
     const layout = () => {
-      const W = stage.clientWidth || window.innerWidth;
-      const H = stage.clientHeight || window.innerHeight;
-      mobile = W < 760;
-      const aspect = W / H;
-      vbW = Math.max(1600, 1000 * aspect);
-      if (mobile) vbW = 1700;
-      vbH = vbW / aspect;
-      svg.setAttribute('viewBox', `${-vbW / 2} ${-vbH / 2} ${vbW} ${vbH}`);
-      svg.setAttribute('preserveAspectRatio', 'xMidYMid slice');
+      W = stage.clientWidth || window.innerWidth;
+      H = stage.clientHeight || window.innerHeight;
+      svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+      svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+      const nav = 64;
+      const panel = chaptersEl.getBoundingClientRect();
+      const tallest = Math.max(...chapters.map((c) => c.offsetHeight), 180);
+      if (W >= 1100) {
+        // Text on the left, scene on the right
+        const sLeft = stage.getBoundingClientRect().left;
+        const left = panel.right - sLeft + 56;
+        const hudEl = root.querySelector<HTMLElement>('.hud');
+        const right = hudEl ? hudEl.getBoundingClientRect().left - sLeft - 32 : W - 150;
+        safe = { x: left, y: nav + 40, w: right - left, h: H - nav - 110 };
+      } else {
+        // Scene on top, text below
+        const top = nav + (W < 760 ? 56 : 40);
+        const hud = W >= 760 ? 110 : 0; // keep clear of the zoom readout on tablets
+        safe = { x: 20, y: top, w: W - 40 - hud, h: H - top - tallest - 70 };
+      }
+      safe.h = Math.max(safe.h, 160);
     };
 
+    const fit = (b: number[], pad: number) => Math.min((safe.w * pad) / (b[2] - b[0]), (safe.h * pad) / (b[3] - b[1]));
     const smooth = (t: number) => t * t * (3 - 2 * t);
     const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 
-    let ticking = false;
+    let target = 0;
+    let current = -1;
     let lastChapter = -1;
-    const update = () => {
-      ticking = false;
+    let raf = 0;
+
+    const readTarget = () => {
       const r = root.getBoundingClientRect();
-      const total = r.height - window.innerHeight;
-      const p = clamp(-r.top / total);
+      return clamp(-r.top / (r.height - window.innerHeight));
+    };
 
-      // Each level gets a resting zoom; travel between them eases so the camera lingers.
-      const fill = mobile ? 0.82 : 0.62;
-      const scales = WIDTHS.map((w, i) => (i === WIDTHS.length - 1 ? 0.96 : (fill * vbW) / w));
-      const pos = p * (scales.length - 1);
-      const k = Math.min(scales.length - 2, Math.floor(pos));
-      const t = smooth(clamp((pos - k - 0.2) / 0.6));
+    const render = (p: number) => {
+      const scales = B.map((b, i) => fit(b, i === L - 1 ? (W >= 1100 ? 1.12 : 1) : 0.9));
+      const pos = p * (L - 1);
+      const k = Math.min(L - 2, Math.floor(pos));
+      // Rest on each level, then travel: the camera lingers where a chapter is read.
+      const t = smooth(clamp((pos - k - 0.22) / 0.56));
       const s = Math.exp(Math.log(scales[k]) + (Math.log(scales[k + 1]) - Math.log(scales[k])) * t);
+      const cx = (B[k][0] + B[k][2]) / 2 + (((B[k + 1][0] + B[k + 1][2]) - (B[k][0] + B[k][2])) / 2) * t;
+      const cy = (B[k][1] + B[k][3]) / 2 + (((B[k + 1][1] + B[k + 1][3]) - (B[k][1] + B[k][3])) / 2) * t;
+      const sx = safe.x + safe.w / 2;
+      const sy = safe.y + safe.h / 2;
+      cam.setAttribute('transform', `translate(${(sx - cx * s).toFixed(2)} ${(sy - cy * s).toFixed(2)}) scale(${s.toFixed(5)})`);
 
-      // Keep the focal point clear of the text panel
-      const fx = mobile ? 0 : vbW * 0.14 * (1 - p * 0.9);
-      const fy = mobile ? -vbH * 0.16 : -vbH * 0.03;
-      cam.setAttribute('transform', `translate(${fx.toFixed(2)} ${fy.toFixed(2)}) scale(${s.toFixed(4)})`);
-
-      // Fade each level's details in/out by how large it is on screen
+      // Each level fades in as the camera approaches it and out when it gets too small to read.
       levelGroups.forEach((g) => {
         const i = Number(g.dataset.lvl);
-        const onScreen = (WIDTHS[i] * s) / vbW; // fraction of stage width
-        // Fade out when the level is too small to read; fade in only as the camera nears it.
-        const small = onScreen < 0.04 ? clamp(onScreen / 0.04) : 1;
-        const near = i === 0 ? 1 : clamp((1.55 - onScreen) / 0.5);
-        const o = i === 4 ? near * 0.85 + 0.15 : small * near;
+        const frac = ((B[i][2] - B[i][0]) * s) / safe.w;
+        const small = clamp(frac / 0.05);
+        const near = i === 0 ? 1 : clamp((1.5 - frac) / 0.45);
+        const o = i === L - 1 ? near * 0.85 + 0.15 : small * near;
         g.style.opacity = o.toFixed(3);
       });
 
-      const lvl = Math.round(pos);
+      const lvl = Math.min(L - 1, Math.round(pos));
       levelLabels.forEach((l, i) => l.classList.toggle('on', i === lvl));
-      scaleEl.textContent = `1:${Math.max(1, Math.round(s / scales[scales.length - 1]))}`;
+      scaleEl.textContent = `1:${Math.max(1, Math.round(s / scales[L - 1]))}`;
       barEl.style.setProperty('--p', p.toFixed(4));
 
       const n = chapters.length;
@@ -490,18 +552,27 @@ const levels = ['line', 'app', 'system', 'cluster', 'cloud'];
         lastChapter = ci;
       }
     };
-    const onScroll = () => {
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(update);
-      }
+
+    // Ease the camera toward the scroll position so wheel steps glide instead of jumping.
+    const loop = () => {
+      const d = target - current;
+      current = Math.abs(d) < 0.0004 ? target : current + d * 0.16;
+      render(current);
+      raf = current === target ? 0 : requestAnimationFrame(loop);
     };
+    const kick = () => {
+      target = readTarget();
+      if (!raf) raf = requestAnimationFrame(loop);
+    };
+
     layout();
-    update();
-    window.addEventListener('scroll', onScroll, { passive: true });
+    current = target = readTarget();
+    render(current);
+    window.addEventListener('scroll', kick, { passive: true });
     window.addEventListener('resize', () => {
       layout();
-      onScroll();
+      render(current);
+      kick();
     });
   } else if (root && reduce) {
     root.querySelector<SVGSVGElement>('[data-scene]')?.pauseAnimations();
