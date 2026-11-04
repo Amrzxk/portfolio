@@ -3,30 +3,104 @@
   "role": "DevOps & Cloud Engineer",
   "siteUrl": "https://amr.amrzakariya2020.workers.dev",
   "accent": "#22d3ee",
-  "email": "hello@example.com",
+  "email": "amrzakariya2018@gmail.com",
   "location": "Remote · Available worldwide",
   "seo": {
     "title": "Amr Zakariya — DevOps, Cloud & System Design",
     "description": "DevOps and cloud engineer who designs scalable systems, automates delivery pipelines, and builds web and mobile apps end to end.",
     "image": "",
-    "keywords": ["DevOps", "Cloud", "System Design", "Kubernetes", "AWS", "Full-Stack"]
+    "keywords": [
+      "DevOps",
+      "Cloud",
+      "System Design",
+      "Kubernetes",
+      "AWS",
+      "Full-Stack"
+    ]
   },
   "socials": [
-    { "label": "GitHub", "url": "https://github.com/Amrzxk", "icon": "github" },
-    { "label": "LinkedIn", "url": "https://www.linkedin.com/", "icon": "linkedin" },
-    { "label": "Email", "url": "mailto:hello@example.com", "icon": "mail" }
+    {
+      "label": "GitHub",
+      "url": "https://github.com/Amrzxk",
+      "icon": "github"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/",
+      "icon": "linkedin"
+    }
   ],
   "sections": [
-    { "id": "hero", "enabled": true, "title": "Home", "showInNav": false },
-    { "id": "story", "enabled": true, "title": "Story", "showInNav": true },
-    { "id": "about", "enabled": true, "title": "About", "showInNav": true },
-    { "id": "skills", "enabled": true, "title": "Skills", "showInNav": true },
-    { "id": "projects", "enabled": true, "title": "Projects", "showInNav": true, "intro": "Selected work across infrastructure, architecture and product. Filter by discipline." },
-    { "id": "experience", "enabled": true, "title": "Experience", "showInNav": true },
-    { "id": "certifications", "enabled": true, "title": "Certifications", "showInNav": false },
-    { "id": "blog", "enabled": true, "title": "Writing", "showInNav": true, "intro": "Notes on system design, cloud architecture and shipping software." },
-    { "id": "resume", "enabled": true, "title": "Résumé", "showInNav": false },
-    { "id": "contact", "enabled": true, "title": "Contact", "showInNav": true }
+    {
+      "id": "hero",
+      "enabled": true,
+      "title": "Home",
+      "showInNav": false,
+      "intro": ""
+    },
+    {
+      "id": "story",
+      "enabled": true,
+      "title": "Story",
+      "showInNav": true,
+      "intro": ""
+    },
+    {
+      "id": "about",
+      "enabled": true,
+      "title": "About",
+      "showInNav": true,
+      "intro": ""
+    },
+    {
+      "id": "skills",
+      "enabled": true,
+      "title": "Skills",
+      "showInNav": true,
+      "intro": ""
+    },
+    {
+      "id": "projects",
+      "enabled": true,
+      "title": "Projects",
+      "showInNav": true,
+      "intro": "Selected work across infrastructure, architecture and product. Filter by discipline."
+    },
+    {
+      "id": "experience",
+      "enabled": true,
+      "title": "Experience",
+      "showInNav": true,
+      "intro": ""
+    },
+    {
+      "id": "certifications",
+      "enabled": true,
+      "title": "Certifications",
+      "showInNav": false,
+      "intro": ""
+    },
+    {
+      "id": "blog",
+      "enabled": true,
+      "title": "Writing",
+      "showInNav": true,
+      "intro": "Notes on system design, cloud architecture and shipping software."
+    },
+    {
+      "id": "resume",
+      "enabled": true,
+      "title": "Résumé",
+      "showInNav": false,
+      "intro": ""
+    },
+    {
+      "id": "contact",
+      "enabled": true,
+      "title": "Contact",
+      "showInNav": true,
+      "intro": ""
+    }
   ],
   "footerNote": "Built with Astro · Hosted for $0 on Cloudflare Pages"
 }
