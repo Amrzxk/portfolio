@@ -1,0 +1,13 @@
+{
+  "kicker": "About me",
+  "heading": "Engineer by trade, systems thinker by habit.",
+  "photo": "",
+  "body": "I'm a DevOps and cloud engineer with a full-stack developer's instincts. I like owning problems end to end: sketching the architecture, provisioning it with Terraform, wiring up the CI/CD, and writing the application code that runs on top.\n\nI've helped teams migrate monoliths to Kubernetes, cut cloud bills without cutting reliability, and turn week-long release cycles into multiple deploys a day.\n\nOutside work I write about system design, contribute to open-source tooling, and tinker with my homelab cluster.",
+  "highlights": [
+    "Kubernetes, Terraform & GitOps in production",
+    "Multi-cloud: AWS, Azure & GCP",
+    "Designing for scale, resilience & cost",
+    "Full-stack apps: React, Node, Python, Flutter"
+  ],
+  "availability": { "open": true, "text": "Open to full-time roles & consulting" }
+}

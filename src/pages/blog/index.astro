@@ -1,0 +1,122 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getPosts } from '../../lib/collections';
+import { sectionIntro, sectionTitle } from '../../lib/data';
+
+const posts = await getPosts();
+const title = sectionTitle('blog', 'Writing');
+const intro = sectionIntro('blog');
+const tags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
+---
+
+<Base title={title} description={intro || `Articles and notes — ${title}`}>
+  <section class="page">
+    <div class="container">
+      <a class="back" href="/"><Icon name="back" size={16} /> Home</a>
+      <header class="section-head">
+        <p class="kicker">~/blog</p>
+        <h1>{title}</h1>
+        {intro && <p>{intro}</p>}
+        <a class="link rss" href="/rss.xml"><Icon name="rss" size={16} /> RSS feed</a>
+      </header>
+
+      {
+        tags.length > 1 && (
+          <div class="tags" role="group" aria-label="Filter by tag" data-tags>
+            <button type="button" class="chip tag" aria-pressed="true" data-tag="">
+              all
+            </button>
+            {tags.map((t) => (
+              <button type="button" class="chip tag" aria-pressed="false" data-tag={t}>
+                #{t}
+              </button>
+            ))}
+          </div>
+        )
+      }
+
+      {
+        posts.length ? (
+          <div class="grid">
+            {posts.map((p, i) => (
+              <div data-post-tags={p.data.tags.join(' ')}>
+                <PostCard post={p} index={i} headingLevel="h2" />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p class="muted">No posts yet — check back soon.</p>
+        )
+      }
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page {
+    padding: calc(var(--nav-h) + clamp(32px, 6vw, 72px)) 0 clamp(48px, 8vw, 96px);
+  }
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin-bottom: 20px;
+  }
+  .back:hover {
+    color: var(--accent-ink);
+  }
+  h1 {
+    font-size: clamp(2.2rem, 3.4vw + 1rem, 3.4rem);
+  }
+  .rss {
+    margin-top: 16px;
+    font-size: 0.9rem;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+  .tag {
+    cursor: pointer;
+    min-height: 36px;
+    padding-inline: 14px;
+    font-size: 0.82rem;
+  }
+  .tag[aria-pressed='true'] {
+    color: var(--on-accent);
+    background: var(--accent);
+    border-color: transparent;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+    gap: clamp(14px, 2vw, 22px);
+  }
+  .grid > div {
+    display: grid;
+  }
+  .grid > div[hidden] {
+    display: none;
+  }
+</style>
+
+<script>
+  const bar = document.querySelector<HTMLElement>('[data-tags]');
+  bar?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-tag]');
+    if (!btn) return;
+    const tag = btn.dataset.tag!;
+    bar.querySelectorAll('[data-tag]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    document.querySelectorAll<HTMLElement>('[data-post-tags]').forEach((el) => {
+      el.hidden = !!tag && !el.dataset.postTags!.split(' ').includes(tag);
+      el.querySelector('.reveal')?.classList.add('in');
+    });
+  });
+</script>

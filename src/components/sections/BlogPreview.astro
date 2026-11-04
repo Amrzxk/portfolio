@@ -1,0 +1,53 @@
+---
+import Icon from '../Icon.astro';
+import PostCard from '../PostCard.astro';
+import SectionHead from '../SectionHead.astro';
+import { getPosts } from '../../lib/collections';
+import { sectionIntro } from '../../lib/data';
+
+interface Props {
+  title: string;
+  kicker: string;
+}
+const { title, kicker } = Astro.props;
+const posts = await getPosts();
+const latest = posts.slice(0, 3);
+---
+
+{
+  latest.length > 0 && (
+    <section id="blog" class="section">
+      <div class="container">
+        <div class="head-row">
+          <SectionHead kicker={kicker} title={title} intro={sectionIntro('blog')} />
+          <a class="btn all reveal" href="/blog/">
+            All posts <Icon name="arrow" size={16} />
+          </a>
+        </div>
+        <div class="grid">
+          {latest.map((p, i) => (
+            <PostCard post={p} index={i} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .head-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0 24px;
+  }
+  .all {
+    margin-bottom: clamp(32px, 5vw, 56px);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: clamp(14px, 2vw, 22px);
+  }
+</style>

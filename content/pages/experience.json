@@ -1,0 +1,52 @@
+{
+  "intro": "Where I've applied all of this in the real world.",
+  "items": [
+    {
+      "role": "Senior DevOps Engineer",
+      "company": "Northwind Cloud",
+      "companyUrl": "",
+      "location": "Remote",
+      "start": "Mar 2023",
+      "end": "",
+      "current": true,
+      "summary": "Lead the platform team behind a multi-tenant SaaS serving 2M+ monthly users.",
+      "highlights": [
+        "Migrated 30 services from VMs to EKS with zero customer-facing downtime",
+        "Introduced GitOps with Argo CD, cutting deploy time from 45 min to 6 min",
+        "Reduced AWS spend by 38% through right-sizing, Spot and Savings Plans"
+      ],
+      "stack": ["AWS", "EKS", "Terraform", "Argo CD", "Prometheus"]
+    },
+    {
+      "role": "Cloud Engineer",
+      "company": "Contoso Digital",
+      "companyUrl": "",
+      "location": "Hybrid",
+      "start": "Jan 2021",
+      "end": "Feb 2023",
+      "current": false,
+      "summary": "Designed and operated Azure landing zones for enterprise clients.",
+      "highlights": [
+        "Built reusable Terraform modules adopted across 12 client projects",
+        "Implemented centralised logging and alerting with 99.95% SLO tracking",
+        "Hardened IAM and network policies, passing ISO 27001 audit first time"
+      ],
+      "stack": ["Azure", "AKS", "Terraform", "Azure DevOps"]
+    },
+    {
+      "role": "Full-Stack Developer",
+      "company": "Fabrikam Studio",
+      "companyUrl": "",
+      "location": "On-site",
+      "start": "Jun 2019",
+      "end": "Dec 2020",
+      "current": false,
+      "summary": "Built web and mobile products for startups, from MVP to launch.",
+      "highlights": [
+        "Shipped 8 production apps in React, Node.js and Flutter",
+        "Set up the studio's first CI pipelines and Docker-based dev environments"
+      ],
+      "stack": ["React", "Node.js", "Flutter", "PostgreSQL", "Docker"]
+    }
+  ]
+}

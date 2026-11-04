@@ -1,0 +1,59 @@
+{
+  "intro": "Four disciplines, one mindset: build it right, ship it safely, keep it running.",
+  "domains": [
+    {
+      "name": "DevOps",
+      "icon": "devops",
+      "summary": "Automated, observable delivery from commit to production.",
+      "skills": [
+        { "name": "Kubernetes", "level": 5 },
+        { "name": "Docker", "level": 5 },
+        { "name": "Terraform", "level": 5 },
+        { "name": "GitHub Actions / GitLab CI", "level": 5 },
+        { "name": "Argo CD (GitOps)", "level": 4 },
+        { "name": "Prometheus & Grafana", "level": 4 },
+        { "name": "Ansible", "level": 3 }
+      ]
+    },
+    {
+      "name": "System Design",
+      "icon": "system",
+      "summary": "Architectures that scale, fail gracefully, and stay simple.",
+      "skills": [
+        { "name": "Distributed systems", "level": 4 },
+        { "name": "Microservices & event-driven", "level": 5 },
+        { "name": "Kafka / RabbitMQ", "level": 4 },
+        { "name": "Caching strategies (Redis)", "level": 4 },
+        { "name": "API design (REST, gRPC)", "level": 5 },
+        { "name": "Database modelling", "level": 4 }
+      ]
+    },
+    {
+      "name": "Cloud Solutions",
+      "icon": "cloud",
+      "summary": "Secure, cost-aware platforms on every major cloud.",
+      "skills": [
+        { "name": "AWS (EKS, Lambda, RDS, S3)", "level": 5 },
+        { "name": "Azure (AKS, Functions)", "level": 4 },
+        { "name": "Google Cloud (GKE, Cloud Run)", "level": 3 },
+        { "name": "Serverless", "level": 4 },
+        { "name": "IAM & cloud security", "level": 4 },
+        { "name": "FinOps / cost optimisation", "level": 4 }
+      ]
+    },
+    {
+      "name": "App & Web Development",
+      "icon": "code",
+      "summary": "Fast, accessible products on web and mobile.",
+      "skills": [
+        { "name": "TypeScript / JavaScript", "level": 5 },
+        { "name": "React & Next.js", "level": 5 },
+        { "name": "Node.js", "level": 5 },
+        { "name": "Python (FastAPI, Django)", "level": 4 },
+        { "name": "Flutter / React Native", "level": 3 },
+        { "name": "PostgreSQL & MongoDB", "level": 4 }
+      ]
+    }
+  ],
+  "toolbelt": ["Linux", "Bash", "Go", "Helm", "Istio", "Vault", "Nginx", "Cloudflare", "Datadog", "ELK", "Jenkins", "Packer", "Git", "Figma"]
+}

@@ -1,0 +1,37 @@
+{
+  "intro": "Formal proof of the hands-on work.",
+  "items": [
+    {
+      "name": "AWS Certified Solutions Architect – Professional",
+      "issuer": "Amazon Web Services",
+      "date": "2025",
+      "credentialId": "",
+      "verifyUrl": "",
+      "badge": ""
+    },
+    {
+      "name": "Certified Kubernetes Administrator (CKA)",
+      "issuer": "The Linux Foundation",
+      "date": "2024",
+      "credentialId": "",
+      "verifyUrl": "",
+      "badge": ""
+    },
+    {
+      "name": "HashiCorp Certified: Terraform Associate",
+      "issuer": "HashiCorp",
+      "date": "2024",
+      "credentialId": "",
+      "verifyUrl": "",
+      "badge": ""
+    },
+    {
+      "name": "Microsoft Certified: Azure Administrator Associate",
+      "issuer": "Microsoft",
+      "date": "2023",
+      "credentialId": "",
+      "verifyUrl": "",
+      "badge": ""
+    }
+  ]
+}

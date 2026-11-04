@@ -1,0 +1,122 @@
+---
+import Icon from '../Icon.astro';
+import { resume } from '../../lib/data';
+
+interface Props {
+  title: string;
+  kicker: string;
+}
+const { title, kicker } = Astro.props;
+---
+
+{
+  resume.file && (
+    <section id="resume" class="section resume-section">
+      <div class="container">
+        <div class="band reveal">
+          <div class="copy">
+            <p class="kicker">{kicker}</p>
+            <h2>{title}</h2>
+            {resume.intro && <p class="intro">{resume.intro}</p>}
+            {resume.points.length > 0 && (
+              <ul class="points">
+                {resume.points.map((p) => (
+                  <li>
+                    <Icon name="check" size={16} />
+                    {p}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <div class="actions">
+            <span class="file-icon" aria-hidden="true">
+              <Icon name="file" size={40} />
+            </span>
+            <a class="btn btn-primary" href={resume.file} download>
+              <Icon name="download" size={18} />
+              {resume.buttonLabel}
+            </a>
+            <a class="view" href={resume.file} target="_blank" rel="noopener">
+              or view it in your browser
+            </a>
+            {resume.updated && <p class="updated mono">Last updated · {resume.updated}</p>}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .band {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: clamp(28px, 5vw, 56px);
+    align-items: center;
+    padding: clamp(28px, 5vw, 56px);
+    border-radius: calc(var(--radius) + 6px);
+    border: 1px solid color-mix(in oklab, var(--accent) 30%, var(--border));
+    background:
+      radial-gradient(ellipse at 100% 0%, var(--accent-glow), transparent 55%),
+      var(--surface);
+  }
+  h2 {
+    font-size: clamp(1.8rem, 2.2vw + 1rem, 2.6rem);
+  }
+  .intro {
+    margin-top: 14px;
+    color: var(--muted);
+    max-width: 56ch;
+  }
+  .points {
+    display: grid;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .points li {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 0.96rem;
+  }
+  .points :global(svg) {
+    color: var(--accent-ink);
+    flex: none;
+  }
+  .actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    text-align: center;
+  }
+  .file-icon {
+    display: grid;
+    place-items: center;
+    width: 84px;
+    height: 84px;
+    border-radius: 22px;
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+    border: 1px solid color-mix(in oklab, var(--accent) 30%, transparent);
+  }
+  .view {
+    color: var(--muted);
+    font-size: 0.9rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .view:hover {
+    color: var(--text);
+  }
+  .updated {
+    font-size: 0.75rem;
+    color: var(--faint);
+  }
+  @media (max-width: 759px) {
+    .band {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

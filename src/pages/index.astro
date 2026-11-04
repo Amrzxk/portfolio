@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/sections/Hero.astro';
+import Story from '../components/sections/Story.astro';
+import About from '../components/sections/About.astro';
+import Skills from '../components/sections/Skills.astro';
+import Projects from '../components/sections/Projects.astro';
+import Experience from '../components/sections/Experience.astro';
+import Certifications from '../components/sections/Certifications.astro';
+import BlogPreview from '../components/sections/BlogPreview.astro';
+import Resume from '../components/sections/Resume.astro';
+import Contact from '../components/sections/Contact.astro';
+import { site } from '../lib/data';
+
+// Section id → component. Order and visibility come from Settings → Sections.
+const registry = {
+  hero: Hero,
+  story: Story,
+  about: About,
+  skills: Skills,
+  projects: Projects,
+  experience: Experience,
+  certifications: Certifications,
+  blog: BlogPreview,
+  resume: Resume,
+  contact: Contact,
+} as const;
+
+// De-duplicate in case a section was added twice in the CMS.
+const seen = new Set<string>();
+const sections = site.sections.filter((s) => s.enabled && !seen.has(s.id) && seen.add(s.id));
+let n = 0;
+const rendered = sections.map((s) => ({
+  ...s,
+  Component: registry[s.id],
+  kicker: s.id === 'hero' ? '' : `${String(++n).padStart(2, '0')} · ${s.id === 'blog' ? 'writing' : s.id}`,
+}));
+---
+
+<Base>
+  {rendered.map(({ Component, title, kicker }) => <Component title={title} kicker={kicker} />)}
+</Base>

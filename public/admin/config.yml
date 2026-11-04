@@ -1,0 +1,320 @@
+# ─────────────────────────────────────────────────────────────
+#  Sveltia CMS configuration — the admin panel at /admin
+#  Every field here maps to a schema in src/lib/schemas.ts.
+#  If you add a field here, add it to the schema too (and vice versa).
+# ─────────────────────────────────────────────────────────────
+backend:
+  name: github
+  repo: Amrzxk/portfolio
+  branch: main
+  # OAuth helper (Cloudflare Worker). See SETUP.md, step 3.
+  base_url: https://sveltia-cms-auth.CHANGE-ME.workers.dev
+  commit_messages:
+    create: 'content: create {{collection}} “{{slug}}”'
+    update: 'content: update {{collection}} “{{slug}}”'
+    delete: 'content: delete {{collection}} “{{slug}}”'
+    uploadMedia: 'content: upload “{{path}}”'
+    deleteMedia: 'content: delete “{{path}}”'
+
+media_folder: public/uploads
+public_folder: /uploads
+site_url: https://portfolio.pages.dev
+display_url: https://portfolio.pages.dev
+logo_url: /favicon.svg
+
+slug:
+  encoding: ascii
+  clean_accents: true
+
+collections:
+  # ═════════════════════════ SETTINGS ═════════════════════════
+  - name: settings
+    label: ⚙️ Site settings
+    icon: settings
+    editor: { preview: false }
+    files:
+      - name: site
+        label: General, SEO, theme & sections
+        file: content/settings/site.json
+        fields:
+          - { name: name, label: Your name, widget: string }
+          - { name: role, label: Headline role, widget: string, hint: 'Shown in titles, e.g. "DevOps & Cloud Engineer".' }
+          - { name: siteUrl, label: Site URL, widget: string, hint: 'Your public address, e.g. https://amr.pages.dev — used for SEO, sitemap and RSS.' }
+          - { name: accent, label: Accent colour, widget: color, allowInput: true, default: '#22d3ee', hint: 'Buttons, highlights and links use this colour.' }
+          - { name: email, label: Public email, widget: string, required: false, hint: 'Shown in the contact section and used as a fallback if the form fails.' }
+          - { name: location, label: Location, widget: string, required: false }
+          - name: seo
+            label: SEO
+            widget: object
+            fields:
+              - { name: title, label: Browser / Google title, widget: string }
+              - { name: description, label: Meta description, widget: text, hint: 'About 150 characters. Shown in search results and link previews.' }
+              - { name: image, label: Social share image (1200×630), widget: image, required: false }
+              - { name: keywords, label: Keywords, widget: list, required: false, field: { name: keyword, label: Keyword, widget: string } }
+          - name: socials
+            label: Social links
+            widget: list
+            summary: '{{fields.label}} — {{fields.url}}'
+            fields:
+              - { name: label, label: Label, widget: string }
+              - { name: url, label: URL, widget: string, hint: 'Full URL (https://…) or mailto:you@example.com' }
+              - name: icon
+                label: Icon
+                widget: select
+                default: globe
+                options: [github, linkedin, x, mail, globe, rss, youtube]
+          - name: sections
+            label: Sections (drag to reorder)
+            widget: list
+            hint: 'The order here is the order on the home page. Untick “Visible” to hide a section.'
+            summary: '{{fields.title}} · {{fields.id}} · visible: {{fields.enabled}}'
+            fields:
+              - name: id
+                label: Section
+                widget: select
+                options:
+                  - { label: Hero (landing), value: hero }
+                  - { label: Story timeline, value: story }
+                  - { label: About, value: about }
+                  - { label: Skills, value: skills }
+                  - { label: Projects, value: projects }
+                  - { label: Experience, value: experience }
+                  - { label: Certifications, value: certifications }
+                  - { label: Blog / Writing, value: blog }
+                  - { label: Résumé download, value: resume }
+                  - { label: Contact form, value: contact }
+              - { name: enabled, label: Visible, widget: boolean, default: true }
+              - { name: title, label: Title, widget: string }
+              - { name: showInNav, label: Show in top menu, widget: boolean, default: true }
+              - { name: intro, label: Intro line (Projects & Blog only), widget: text, required: false }
+          - { name: footerNote, label: Footer note, widget: string, required: false }
+
+  # ═════════════════════════ PAGE SECTIONS ═════════════════════════
+  - name: pages
+    label: 📄 Page sections
+    icon: article
+    editor: { preview: false }
+    files:
+      - name: story
+        label: Hero & story
+        file: content/pages/story.json
+        fields:
+          - { name: prompt, label: Terminal prompt, widget: string, default: '$ whoami' }
+          - { name: greeting, label: Greeting, widget: string, required: false }
+          - { name: headline, label: Big headline, widget: text }
+          - { name: intro, label: Intro paragraph, widget: text, required: false }
+          - name: roles
+            label: Rotating roles (typed effect)
+            widget: list
+            field: { name: role, label: Role, widget: string }
+          - name: primaryCta
+            label: Main button
+            widget: object
+            fields:
+              - { name: label, label: Text, widget: string }
+              - { name: href, label: Link, widget: string, hint: 'e.g. /#projects or /#contact' }
+          - { name: showResumeButton, label: Show résumé button, widget: boolean, default: true }
+          - { name: terminalTitle, label: Terminal window title, widget: string, default: '~/portfolio' }
+          - name: stats
+            label: Stats
+            widget: list
+            summary: '{{fields.value}} {{fields.label}}'
+            fields:
+              - { name: value, label: Value, widget: string, hint: 'e.g. 6+ or 99.9%' }
+              - { name: label, label: Label, widget: string }
+          - { name: chaptersIntro, label: Story intro, widget: text, required: false }
+          - name: chapters
+            label: Story chapters
+            widget: list
+            summary: '{{fields.marker}} — {{fields.title}}'
+            fields:
+              - { name: marker, label: Marker, widget: string, hint: 'e.g. "Chapter 01", "2019" or "Now"' }
+              - { name: title, label: Title, widget: string }
+              - { name: body, label: Text, widget: text }
+              - { name: image, label: Image, widget: image, required: false }
+
+      - name: about
+        label: About
+        file: content/pages/about.json
+        fields:
+          - { name: kicker, label: Small label, widget: string, default: About me }
+          - { name: heading, label: Heading, widget: string }
+          - { name: photo, label: Photo, widget: image, required: false, hint: 'Portrait, ideally 4:5. Leave empty to show your initials.' }
+          - { name: body, label: Bio, widget: text, hint: 'Leave a blank line between paragraphs.' }
+          - name: highlights
+            label: Highlights
+            widget: list
+            required: false
+            field: { name: highlight, label: Highlight, widget: string }
+          - name: availability
+            label: Availability
+            widget: object
+            fields:
+              - { name: open, label: Open to work, widget: boolean, default: true }
+              - { name: text, label: Status text, widget: string, required: false }
+
+      - name: skills
+        label: Skills
+        file: content/pages/skills.json
+        fields:
+          - { name: intro, label: Intro, widget: text, required: false }
+          - name: domains
+            label: Skill areas
+            widget: list
+            summary: '{{fields.name}}'
+            fields:
+              - { name: name, label: Area name, widget: string }
+              - name: icon
+                label: Icon
+                widget: select
+                default: code
+                options: [devops, system, cloud, code, database, shield, terminal, mobile, layers]
+              - { name: summary, label: One-line summary, widget: string, required: false }
+              - name: skills
+                label: Skills
+                widget: list
+                summary: '{{fields.name}} ({{fields.level}}/5)'
+                fields:
+                  - { name: name, label: Skill, widget: string }
+                  - { name: level, label: Level (1–5), widget: number, value_type: int, min: 1, max: 5, default: 3 }
+          - name: toolbelt
+            label: Other tools (scrolling strip)
+            widget: list
+            required: false
+            field: { name: tool, label: Tool, widget: string }
+
+      - name: experience
+        label: Experience
+        file: content/pages/experience.json
+        fields:
+          - { name: intro, label: Intro, widget: text, required: false }
+          - name: items
+            label: Jobs (newest first)
+            widget: list
+            summary: '{{fields.role}} @ {{fields.company}}'
+            fields:
+              - { name: role, label: Role, widget: string }
+              - { name: company, label: Company, widget: string }
+              - { name: companyUrl, label: Company website, widget: string, required: false }
+              - { name: location, label: Location / mode, widget: string, required: false }
+              - { name: start, label: Start, widget: string, hint: 'e.g. Mar 2023' }
+              - { name: end, label: End, widget: string, required: false, hint: 'Leave empty if current' }
+              - { name: current, label: Current role, widget: boolean, default: false }
+              - { name: summary, label: Summary, widget: text, required: false }
+              - name: highlights
+                label: Achievements
+                widget: list
+                required: false
+                field: { name: highlight, label: Achievement, widget: string }
+              - name: stack
+                label: Tech used
+                widget: list
+                required: false
+                field: { name: tech, label: Tech, widget: string }
+
+      - name: certifications
+        label: Certifications
+        file: content/pages/certifications.json
+        fields:
+          - { name: intro, label: Intro, widget: text, required: false }
+          - name: items
+            label: Certifications
+            widget: list
+            summary: '{{fields.name}}'
+            fields:
+              - { name: name, label: Name, widget: string }
+              - { name: issuer, label: Issuer, widget: string }
+              - { name: date, label: Date / year, widget: string, required: false }
+              - { name: credentialId, label: Credential ID, widget: string, required: false }
+              - { name: verifyUrl, label: Verification link, widget: string, required: false }
+              - { name: badge, label: Badge image, widget: image, required: false }
+
+      - name: resume
+        label: Résumé
+        file: content/pages/resume.json
+        fields:
+          - { name: file, label: Résumé file (PDF), widget: file, required: false, hint: 'Upload a new PDF to replace the old one.' }
+          - { name: intro, label: Text, widget: text, required: false }
+          - { name: buttonLabel, label: Button text, widget: string, default: Download résumé }
+          - { name: updated, label: Last updated, widget: string, required: false }
+          - name: points
+            label: Bullet points
+            widget: list
+            required: false
+            field: { name: point, label: Point, widget: string }
+
+      - name: contact
+        label: Contact
+        file: content/pages/contact.json
+        fields:
+          - { name: intro, label: Intro, widget: text, required: false }
+          - { name: endpoint, label: Form endpoint (Google Apps Script URL), widget: string, required: false, hint: 'Paste the Web App URL from SETUP.md step 5. It ends in /exec.' }
+          - { name: successMessage, label: Success message, widget: string }
+          - { name: showEmail, label: Show email address, widget: boolean, default: true }
+
+  # ═════════════════════════ PROJECTS ═════════════════════════
+  - name: projects
+    label: 🚀 Projects
+    label_singular: Project
+    icon: rocket_launch
+    folder: content/projects
+    create: true
+    delete: true
+    extension: md
+    format: frontmatter
+    slug: '{{slug}}'
+    preview_path: '/projects/{{slug}}/'
+    summary: '{{title}}{{featured | ternary(" ★", "")}}'
+    sortable_fields: [order, title, date]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: summary, label: Card summary, widget: text }
+      - name: domains
+        label: Disciplines
+        widget: select
+        multiple: true
+        min: 1
+        options:
+          - { label: DevOps, value: devops }
+          - { label: System Design, value: system-design }
+          - { label: Cloud, value: cloud }
+          - { label: App & Web, value: app-web }
+      - name: stack
+        label: Tech stack
+        widget: list
+        required: false
+        field: { name: tech, label: Tech, widget: string }
+      - { name: cover, label: Cover image (16:9), widget: image, required: false }
+      - { name: repo, label: Source code URL, widget: string, required: false }
+      - { name: live, label: Live demo URL, widget: string, required: false }
+      - { name: featured, label: Featured, widget: boolean, default: false }
+      - { name: order, label: Order (lower = first), widget: number, value_type: int, default: 100 }
+      - { name: date, label: Date, widget: datetime, time_format: false, format: 'YYYY-MM-DD', required: false }
+      - { name: body, label: Case study, widget: markdown }
+
+  # ═════════════════════════ BLOG ═════════════════════════
+  - name: blog
+    label: ✍️ Blog
+    label_singular: Post
+    icon: edit_note
+    folder: content/blog
+    create: true
+    delete: true
+    extension: md
+    format: frontmatter
+    slug: '{{slug}}'
+    preview_path: '/blog/{{slug}}/'
+    summary: '{{title}} · {{date | date("YYYY-MM-DD")}}{{draft | ternary(" (draft)", "")}}'
+    sortable_fields: [date, title]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: description, label: Short description, widget: text }
+      - { name: date, label: Publish date, widget: datetime, time_format: false, format: 'YYYY-MM-DD' }
+      - name: tags
+        label: Tags
+        widget: list
+        required: false
+        field: { name: tag, label: Tag, widget: string }
+      - { name: cover, label: Cover image, widget: image, required: false }
+      - { name: draft, label: Draft (hidden from site), widget: boolean, default: false }
+      - { name: body, label: Content, widget: markdown }

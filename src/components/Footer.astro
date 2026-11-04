@@ -1,0 +1,60 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../lib/data';
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-name">© {year} {site.name}</p>
+      {site.footerNote && <p class="footer-note mono">{site.footerNote}</p>}
+    </div>
+    <ul class="footer-socials" aria-label="Social links">
+      {
+        site.socials.map((s) => (
+          <li>
+            <a class="icon-btn" href={s.url} target={s.url.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer" aria-label={s.label}>
+              <Icon name={s.icon} />
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <a class="icon-btn" href="#main" aria-label="Back to top">
+          <Icon name="arrow" class="up" />
+        </a>
+      </li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--border);
+    padding-block: 32px;
+    margin-top: 32px;
+  }
+  .footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .footer-name {
+    font-weight: 600;
+  }
+  .footer-note {
+    margin-top: 4px;
+    font-size: 0.78rem;
+    color: var(--faint);
+  }
+  .footer-socials {
+    display: flex;
+    gap: 4px;
+  }
+  .footer-socials :global(.up) {
+    transform: rotate(-90deg);
+  }
+</style>

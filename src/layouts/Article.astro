@@ -1,0 +1,84 @@
+---
+import Base from './Base.astro';
+import Icon from '../components/Icon.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  backHref: string;
+  backLabel: string;
+}
+const { title, description, image, backHref, backLabel } = Astro.props;
+---
+
+<Base title={title} description={description} image={image} type="article">
+  <article class="article">
+    <div class="container narrow">
+      <a class="back" href={backHref}><Icon name="back" size={16} /> {backLabel}</a>
+      <header class="head">
+        <slot name="meta" />
+        <h1>{title}</h1>
+        <p class="lede">{description}</p>
+        <slot name="header-extra" />
+      </header>
+    </div>
+    {
+      image && (
+        <div class="container wide">
+          <img class="hero-img" src={image} alt="" decoding="async" />
+        </div>
+      )
+    }
+    <div class="container narrow">
+      <div class="prose">
+        <slot />
+      </div>
+      <slot name="footer" />
+    </div>
+  </article>
+</Base>
+
+<style>
+  .article {
+    padding: calc(var(--nav-h) + clamp(32px, 6vw, 72px)) 0 clamp(48px, 8vw, 96px);
+  }
+  .narrow {
+    max-width: 760px;
+  }
+  .wide {
+    max-width: 1000px;
+    margin-block: 8px 40px;
+  }
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+  .back:hover {
+    color: var(--accent-ink);
+  }
+  .head {
+    margin: 20px 0 36px;
+  }
+  h1 {
+    margin-top: 12px;
+    font-size: clamp(2rem, 3.4vw + 1rem, 3.4rem);
+    letter-spacing: -0.03em;
+  }
+  .lede {
+    margin-top: 16px;
+    font-size: clamp(1.05rem, 0.5vw + 1rem, 1.25rem);
+    color: var(--muted);
+  }
+  .hero-img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+  }
+</style>

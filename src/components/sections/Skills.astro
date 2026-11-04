@@ -1,0 +1,175 @@
+---
+import Icon from '../Icon.astro';
+import SectionHead from '../SectionHead.astro';
+import { skills } from '../../lib/data';
+
+interface Props {
+  title: string;
+  kicker: string;
+}
+const { title, kicker } = Astro.props;
+const levelText = ['', 'Familiar', 'Working knowledge', 'Proficient', 'Advanced', 'Expert'];
+---
+
+<section id="skills" class="section">
+  <div class="container">
+    <SectionHead kicker={kicker} title={title} intro={skills.intro} />
+
+    <div class="domains">
+      {
+        skills.domains.map((d, i) => (
+          <article class="card card-hover domain reveal" style={`--d:${i}`}>
+            <header>
+              <span class="domain-icon">
+                <Icon name={d.icon} size={22} />
+              </span>
+              <div>
+                <h3>{d.name}</h3>
+                {d.summary && <p class="muted">{d.summary}</p>}
+              </div>
+            </header>
+            <ul class="skill-list">
+              {d.skills.map((s) => (
+                <li>
+                  <span>{s.name}</span>
+                  <span class="meter" role="img" aria-label={`${levelText[s.level]} (${s.level} of 5)`} title={levelText[s.level]}>
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <i class:list={{ on: n <= s.level }} />
+                    ))}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))
+      }
+    </div>
+
+    {
+      skills.toolbelt.length > 0 && (
+        <div class="toolbelt reveal" aria-label="Other tools I use">
+          <p class="toolbelt-label mono">// also in the toolbelt</p>
+          <div class="marquee">
+            <ul class="track">
+              {[...skills.toolbelt, ...skills.toolbelt].map((t, i) => (
+                <li class="chip" aria-hidden={i >= skills.toolbelt.length ? 'true' : undefined}>
+                  {t}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .domains {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(14px, 2vw, 22px);
+  }
+  .domain header {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 22px;
+  }
+  .domain-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+    border: 1px solid color-mix(in oklab, var(--accent) 30%, transparent);
+  }
+  .domain h3 {
+    font-size: 1.25rem;
+  }
+  .domain header p {
+    margin-top: 4px;
+    font-size: 0.94rem;
+  }
+  .skill-list {
+    display: grid;
+    gap: 2px;
+  }
+  .skill-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 9px 0;
+    border-top: 1px dashed var(--border);
+    font-size: 0.95rem;
+  }
+  .meter {
+    display: inline-flex;
+    gap: 4px;
+    flex: none;
+  }
+  .meter i {
+    width: 14px;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--border-strong);
+  }
+  .meter i.on {
+    background: var(--accent);
+  }
+
+  .toolbelt {
+    margin-top: clamp(32px, 5vw, 48px);
+  }
+  .toolbelt-label {
+    font-size: 0.82rem;
+    color: var(--faint);
+    margin-bottom: 14px;
+  }
+  .marquee {
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .track {
+    display: flex;
+    gap: 10px;
+    width: max-content;
+    animation: scroll 40s linear infinite;
+  }
+  .marquee:hover .track {
+    animation-play-state: paused;
+  }
+  .track .chip {
+    font-size: 0.85rem;
+    padding: 8px 14px;
+  }
+  @keyframes scroll {
+    to {
+      transform: translateX(calc(-50% - 5px));
+    }
+  }
+  @media (max-width: 759px) {
+    .domains {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee {
+      mask-image: none;
+      -webkit-mask-image: none;
+    }
+    .track {
+      flex-wrap: wrap;
+      width: auto;
+      animation: none;
+    }
+    .track [aria-hidden='true'] {
+      display: none;
+    }
+  }
+</style>

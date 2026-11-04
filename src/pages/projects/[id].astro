@@ -1,0 +1,95 @@
+---
+import { render } from 'astro:content';
+import Article from '../../layouts/Article.astro';
+import Icon from '../../components/Icon.astro';
+import { getProjects } from '../../lib/collections';
+import { DOMAIN_LABELS } from '../../lib/schemas';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project, i) => ({
+    params: { id: project.id },
+    props: { project, next: projects[(i + 1) % projects.length] },
+  }));
+}
+
+const { project, next } = Astro.props;
+const p = project.data;
+const { Content } = await render(project);
+---
+
+<Article title={p.title} description={p.summary} image={p.cover} backHref="/#projects" backLabel="All projects">
+  <ul class="chip-list" slot="meta">
+    {p.domains.map((d) => <li class="chip chip-accent">{DOMAIN_LABELS[d]}</li>)}
+  </ul>
+
+  <div slot="header-extra" class="extra">
+    {
+      p.stack.length > 0 && (
+        <ul class="chip-list" aria-label="Tech stack">
+          {p.stack.map((s) => (
+            <li class="chip">{s}</li>
+          ))}
+        </ul>
+      )
+    }
+    {
+      (p.repo || p.live) && (
+        <div class="actions">
+          {p.live && (
+            <a class="btn btn-primary" href={p.live} target="_blank" rel="noopener noreferrer">
+              Live site <Icon name="external" size={16} />
+            </a>
+          )}
+          {p.repo && (
+            <a class="btn" href={p.repo} target="_blank" rel="noopener noreferrer">
+              <Icon name="github" size={18} /> Source
+            </a>
+          )}
+        </div>
+      )
+    }
+  </div>
+
+  <Content />
+
+  {
+    next && next.id !== project.id && (
+      <a slot="footer" class="card card-hover next" href={`/projects/${next.id}/`}>
+        <span class="mono muted">Next project</span>
+        <span class="next-title">
+          {next.data.title} <Icon name="arrow" size={18} />
+        </span>
+      </a>
+    )
+  }
+</Article>
+
+<style>
+  .extra {
+    display: grid;
+    gap: 20px;
+    margin-top: 24px;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .next {
+    display: grid;
+    gap: 6px;
+    margin-top: 56px;
+  }
+  .next .mono {
+    font-size: 0.8rem;
+  }
+  .next-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+</style>

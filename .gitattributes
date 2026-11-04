@@ -1,0 +1,12 @@
+# Keep LF everywhere (the CMS commits LF via the GitHub API) and never touch binaries.
+* text=auto eol=lf
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.avif binary
+*.ico binary
+*.woff binary
+*.woff2 binary

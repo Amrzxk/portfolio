@@ -1,0 +1,39 @@
+---
+import { render } from 'astro:content';
+import Article from '../../layouts/Article.astro';
+import { formatDate, getPosts, readingTime } from '../../lib/collections';
+import { sectionTitle } from '../../lib/data';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const d = post.data;
+const { Content } = await render(post);
+---
+
+<Article title={d.title} description={d.description} image={d.cover} backHref="/blog/" backLabel={`All ${sectionTitle('blog', 'posts').toLowerCase()}`}>
+  <p class="meta mono" slot="meta">
+    <time datetime={d.date.toISOString()}>{formatDate(d.date)}</time>
+    <span aria-hidden="true">·</span>
+    <span>{readingTime(post.body)}</span>
+  </p>
+  <ul class="chip-list tags" slot="header-extra">
+    {d.tags.map((t) => <li class="chip">#{t}</li>)}
+  </ul>
+  <Content />
+</Article>
+
+<style>
+  .meta {
+    display: flex;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: var(--faint);
+  }
+  .tags {
+    margin-top: 20px;
+  }
+</style>

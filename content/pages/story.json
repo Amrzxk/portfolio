@@ -1,0 +1,48 @@
+{
+  "prompt": "$ whoami",
+  "greeting": "Hi, I'm Amr.",
+  "headline": "I design systems that scale — and the pipelines that ship them.",
+  "intro": "From the first line of code to the last packet through the load balancer, I care about the whole journey: architecture, infrastructure, delivery, and the product people actually use.",
+  "roles": ["DevOps Engineer", "Cloud Solutions Architect", "System Designer", "App & Web Developer"],
+  "primaryCta": { "label": "See my work", "href": "/#projects" },
+  "showResumeButton": true,
+  "terminalTitle": "~/amr/portfolio",
+  "stats": [
+    { "value": "6+", "label": "Years shipping software" },
+    { "value": "40+", "label": "Services deployed to prod" },
+    { "value": "99.95%", "label": "Uptime on platforms I run" }
+  ],
+  "chaptersIntro": "Every system has an origin story. Here's mine — scroll through it.",
+  "chapters": [
+    {
+      "marker": "Chapter 01",
+      "title": "It started with a broken website",
+      "body": "I taught myself HTML to fix a site nobody else would touch. The moment it loaded, I was hooked — not just on building things, but on understanding why they break.",
+      "image": ""
+    },
+    {
+      "marker": "Chapter 02",
+      "title": "From pages to products",
+      "body": "I moved on to full-stack web and mobile apps: React front ends, Node and Python APIs, Flutter on the phone. Shipping features taught me that great code is useless if it can't reach users reliably.",
+      "image": ""
+    },
+    {
+      "marker": "Chapter 03",
+      "title": "Falling for the pipeline",
+      "body": "Manual deploys at 2 a.m. pushed me into DevOps. I automated everything I could — CI/CD, infrastructure as code, containers — and watched release days go from dreaded to boring. Boring is good.",
+      "image": ""
+    },
+    {
+      "marker": "Chapter 04",
+      "title": "Thinking in systems",
+      "body": "Scale forced bigger questions: queues or streams? SQL or NoSQL? Where do we cache, and what happens when a region goes dark? System design became the way I reason about every problem.",
+      "image": ""
+    },
+    {
+      "marker": "Now",
+      "title": "Building on the cloud",
+      "body": "Today I architect cloud platforms end to end — secure, observable, cost-aware — and still write the app code that runs on them. I'm looking for teams who want both halves done right.",
+      "image": ""
+    }
+  ]
+}

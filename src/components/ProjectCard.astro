@@ -1,0 +1,145 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Icon from './Icon.astro';
+import { DOMAIN_LABELS } from '../lib/schemas';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  index?: number;
+}
+const { project, index = 0 } = Astro.props;
+const p = project.data;
+const href = `/projects/${project.id}/`;
+const iconFor: Record<string, string> = { devops: 'devops', 'system-design': 'system', cloud: 'cloud', 'app-web': 'code' };
+---
+
+<article class="card card-hover project reveal" data-domains={p.domains.join(' ')} style={`--d:${index % 3}`}>
+  <div class="visual" aria-hidden="true">
+    {
+      p.cover ? (
+        <img src={p.cover} alt="" loading="lazy" decoding="async" />
+      ) : (
+        <div class="art">
+          <Icon name={iconFor[p.domains[0]] ?? 'code'} size={64} />
+        </div>
+      )
+    }
+    {p.featured && <span class="badge mono"><Icon name="star" size={12} /> Featured</span>}
+  </div>
+
+  <div class="body">
+    <ul class="chip-list domains" aria-label="Domains">
+      {p.domains.map((d) => <li class="chip chip-accent">{DOMAIN_LABELS[d]}</li>)}
+    </ul>
+    <h3><a href={href} class="stretched">{p.title}</a></h3>
+    <p class="summary">{p.summary}</p>
+    {
+      p.stack.length > 0 && (
+        <ul class="chip-list stack" aria-label="Tech stack">
+          {p.stack.slice(0, 5).map((s) => <li class="chip">{s}</li>)}
+          {p.stack.length > 5 && <li class="chip">+{p.stack.length - 5}</li>}
+        </ul>
+      )
+    }
+    <div class="links">
+      <span class="link">Case study <Icon name="arrow" size={16} /></span>
+      <span class="ext">
+        {p.repo && <a class="icon-btn" href={p.repo} target="_blank" rel="noopener noreferrer" aria-label={`${p.title} source code`}><Icon name="github" size={18} /></a>}
+        {p.live && <a class="icon-btn" href={p.live} target="_blank" rel="noopener noreferrer" aria-label={`${p.title} live site`}><Icon name="external" size={18} /></a>}
+      </span>
+    </div>
+  </div>
+</article>
+
+<style>
+  .project {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+  }
+  .project[hidden] {
+    display: none;
+  }
+  .visual {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-2);
+    overflow: hidden;
+  }
+  .visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s var(--ease);
+  }
+  .project:hover .visual img {
+    transform: scale(1.04);
+  }
+  .art {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    color: var(--accent-ink);
+    background:
+      radial-gradient(circle at 75% 25%, var(--accent-glow), transparent 55%),
+      linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 24px 24px,
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 24px 24px;
+  }
+  .art :global(svg) {
+    opacity: 0.85;
+    transition: transform 0.5s var(--ease);
+  }
+  .project:hover .art :global(svg) {
+    transform: scale(1.08) rotate(-4deg);
+  }
+  .badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--bg) 80%, transparent);
+    border: 1px solid var(--border);
+    font-size: 0.72rem;
+    color: var(--text);
+    backdrop-filter: blur(6px);
+  }
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    flex: 1;
+    padding: clamp(18px, 2.5vw, 24px);
+  }
+  h3 {
+    font-size: 1.22rem;
+  }
+  .stretched::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  .summary {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .links {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 6px;
+  }
+  .ext {
+    display: flex;
+    gap: 2px;
+    position: relative;
+    z-index: 2;
+  }
+</style>

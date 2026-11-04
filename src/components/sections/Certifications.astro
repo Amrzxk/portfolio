@@ -1,0 +1,96 @@
+---
+import Icon from '../Icon.astro';
+import SectionHead from '../SectionHead.astro';
+import { certifications } from '../../lib/data';
+
+interface Props {
+  title: string;
+  kicker: string;
+}
+const { title, kicker } = Astro.props;
+const initials = (s: string) =>
+  s
+    .split(/\s+/)
+    .filter((w) => /^[A-Za-z]/.test(w))
+    .map((w) => w[0])
+    .join('')
+    .slice(0, 3)
+    .toUpperCase();
+---
+
+<section id="certifications" class="section">
+  <div class="container">
+    <SectionHead kicker={kicker} title={title} intro={certifications.intro} />
+    <ul class="certs">
+      {
+        certifications.items.map((c, i) => (
+          <li class="card card-hover cert reveal" style={`--d:${i % 4}`}>
+            {c.badge ? (
+              <img class="badge" src={c.badge} alt="" loading="lazy" decoding="async" width="56" height="56" />
+            ) : (
+              <span class="badge mono" aria-hidden="true">
+                {initials(c.issuer)}
+              </span>
+            )}
+            <div class="info">
+              <h3>{c.name}</h3>
+              <p class="muted">
+                {c.issuer}
+                {c.date && <> · {c.date}</>}
+              </p>
+              {c.credentialId && <p class="cid mono">ID: {c.credentialId}</p>}
+              {c.verifyUrl && (
+                <a class="link verify" href={c.verifyUrl} target="_blank" rel="noopener noreferrer">
+                  Verify <Icon name="external" size={14} />
+                </a>
+              )}
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .certs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+    gap: clamp(14px, 2vw, 20px);
+  }
+  .cert {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .badge {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    object-fit: contain;
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+    border: 1px solid color-mix(in oklab, var(--accent) 30%, transparent);
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  h3 {
+    font-size: 1rem;
+    line-height: 1.35;
+  }
+  .info p {
+    margin-top: 6px;
+    font-size: 0.9rem;
+  }
+  .cid {
+    font-size: 0.75rem !important;
+    color: var(--faint);
+  }
+  .verify {
+    margin-top: 10px;
+    font-size: 0.9rem;
+  }
+</style>

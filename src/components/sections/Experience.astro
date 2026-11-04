@@ -1,0 +1,130 @@
+---
+import SectionHead from '../SectionHead.astro';
+import { experience } from '../../lib/data';
+
+interface Props {
+  title: string;
+  kicker: string;
+}
+const { title, kicker } = Astro.props;
+---
+
+<section id="experience" class="section">
+  <div class="container">
+    <SectionHead kicker={kicker} title={title} intro={experience.intro} />
+    <ol class="jobs">
+      {
+        experience.items.map((j) => (
+          <li class="job reveal">
+            <div class="when mono">
+              <span>{j.start}</span>
+              <span class="sep">—</span>
+              <span>{j.current ? 'Present' : j.end || 'Present'}</span>
+              {j.current && <span class="now">Now</span>}
+            </div>
+            <div class="card what">
+              <h3>{j.role}</h3>
+              <p class="org">
+                {j.companyUrl ? (
+                  <a href={j.companyUrl} target="_blank" rel="noopener noreferrer">
+                    {j.company}
+                  </a>
+                ) : (
+                  j.company
+                )}
+                {j.location && <span class="muted"> · {j.location}</span>}
+              </p>
+              {j.summary && <p class="summary">{j.summary}</p>}
+              {j.highlights.length > 0 && (
+                <ul class="hl">
+                  {j.highlights.map((h) => (
+                    <li>{h}</li>
+                  ))}
+                </ul>
+              )}
+              {j.stack.length > 0 && (
+                <ul class="chip-list">
+                  {j.stack.map((s) => (
+                    <li class="chip">{s}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .jobs {
+    display: grid;
+    gap: clamp(16px, 2.5vw, 24px);
+  }
+  .job {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: clamp(16px, 3vw, 40px);
+  }
+  .when {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: flex-start;
+    gap: 6px;
+    padding-top: 26px;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .sep {
+    color: var(--faint);
+  }
+  .now {
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+    font-size: 0.72rem;
+  }
+  .what h3 {
+    font-size: 1.2rem;
+  }
+  .org {
+    margin-top: 4px;
+    font-weight: 500;
+    color: var(--accent-ink);
+  }
+  .org a:hover {
+    text-decoration: underline;
+  }
+  .summary {
+    margin-top: 12px;
+    color: var(--muted);
+  }
+  .hl {
+    display: grid;
+    gap: 8px;
+    margin: 16px 0 18px;
+  }
+  .hl li {
+    position: relative;
+    padding-left: 22px;
+    font-size: 0.96rem;
+  }
+  .hl li::before {
+    content: '▹';
+    position: absolute;
+    left: 0;
+    color: var(--accent-ink);
+  }
+  @media (max-width: 719px) {
+    .job {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 10px;
+    }
+    .when {
+      padding-top: 0;
+    }
+  }
+</style>
