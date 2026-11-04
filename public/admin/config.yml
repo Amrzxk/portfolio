@@ -18,8 +18,8 @@ backend:
 
 media_folder: public/uploads
 public_folder: /uploads
-site_url: https://portfolio.pages.dev
-display_url: https://portfolio.pages.dev
+site_url: https://amr.amrzakariya2020.workers.dev
+display_url: https://amr.amrzakariya2020.workers.dev
 logo_url: /favicon.svg
 
 slug:
@@ -39,7 +39,7 @@ collections:
         fields:
           - { name: name, label: Your name, widget: string }
           - { name: role, label: Headline role, widget: string, hint: 'Shown in titles, e.g. "DevOps & Cloud Engineer".' }
-          - { name: siteUrl, label: Site URL, widget: string, hint: 'Your public address, e.g. https://amr.pages.dev — used for SEO, sitemap and RSS.' }
+          - { name: siteUrl, label: Site URL, widget: string, hint: 'Your public address, e.g. https://amr.amrzakariya2020.workers.dev — used for SEO, sitemap and RSS.' }
           - { name: accent, label: Accent colour, widget: color, allowInput: true, default: '#22d3ee', hint: 'Buttons, highlights and links use this colour.' }
           - { name: email, label: Public email, widget: string, required: false, hint: 'Shown in the contact section and used as a fallback if the form fails.' }
           - { name: location, label: Location, widget: string, required: false }
