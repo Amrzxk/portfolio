@@ -102,7 +102,12 @@ function clean_(v, max) {
 }
 
 function esc_(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+  return String(s)
+    .split('&').join('&amp;')
+    .split('<').join('&lt;')
+    .split('>').join('&gt;')
+    .split(String.fromCharCode(34)).join('&quot;') // double quote
+    .split(String.fromCharCode(39)).join('&#39;'); // single quote
 }
 
 function json_(obj) {
