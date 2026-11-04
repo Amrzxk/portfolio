@@ -1,6 +1,6 @@
 {
   "intro": "Have a role, a project, or a gnarly infrastructure problem? Send me a message — it lands straight in my inbox and I usually reply within a day.",
-  "endpoint": "",
+  "endpoint": "https://script.google.com/macros/s/AKfycbwewHamGpc9t7M1px7tgQLhjDLRXE1arxOrR69-tSFwWpSXVYOmOPi10Y_tuuUMTWcXiA/exec",
   "successMessage": "Thanks! Your message is on its way. I'll get back to you soon.",
   "showEmail": true
 }
