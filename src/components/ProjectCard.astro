@@ -22,7 +22,7 @@ const year = p.date ? p.date.getUTCFullYear() : '';
       ) : (
         <div class="plate" aria-hidden="true">
           <span class="path mono">~/projects/{project.id}</span>
-          <span class="big serif">{num}</span>
+          <span class="big display">{num}</span>
           <span class="tree mono">
             {p.stack.slice(0, 3).map((s, i, a) => (
               <span>
@@ -125,10 +125,12 @@ const year = p.date ? p.date.getUTCFullYear() : '';
   .big {
     position: absolute;
     right: 14px;
-    bottom: -0.18em;
-    font-size: clamp(6rem, 9vw, 8.5rem);
+    bottom: -0.12em;
+    font-size: clamp(4.2rem, 6vw, 5.6rem);
     line-height: 1;
-    font-style: italic;
+    font-weight: 600;
+    font-stretch: 112.5%;
+    letter-spacing: -0.06em;
     color: var(--accent);
     opacity: 0.9;
     transition: transform 0.6s var(--ease);

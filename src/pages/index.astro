@@ -30,10 +30,11 @@ const registry = {
 const seen = new Set<string>();
 const sections = site.sections.filter((s) => s.enabled && !seen.has(s.id) && seen.add(s.id));
 let n = 0;
+const total = String(sections.filter((s) => s.id !== 'hero').length).padStart(2, '0');
 const rendered = sections.map((s) => ({
   ...s,
   Component: registry[s.id],
-  kicker: s.id === 'hero' ? '' : `${String(++n).padStart(2, '0')} · ${s.id === 'blog' ? 'writing' : s.id}`,
+  kicker: s.id === 'hero' ? '' : `${String(++n).padStart(2, '0')}/${total} · ${s.id === 'blog' ? 'writing' : s.id}`,
 }));
 ---
 

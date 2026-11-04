@@ -6,7 +6,7 @@ const contactHref = isEnabled('contact') ? '/#contact' : site.email ? `mailto:${
 
 <footer class="footer">
   <div class="container">
-    <a class="signoff serif" href={contactHref}>
+    <a class="signoff display" href={contactHref}>
       Let’s build something <em class="em">reliable</em>. <span class="arr" aria-hidden="true">→</span>
     </a>
 
@@ -38,9 +38,9 @@ const contactHref = isEnabled('contact') ? '/#contact' : site.email ? `mailto:${
   }
   .signoff {
     display: inline-block;
-    font-size: clamp(2.6rem, 6vw + 1rem, 6.4rem);
-    line-height: 1;
-    letter-spacing: -0.02em;
+    font-size: clamp(1.8rem, 4.4vw + 0.6rem, 4.8rem);
+    line-height: 1.05;
+    letter-spacing: -0.055em;
     transition: color 0.3s;
   }
   .signoff .arr {

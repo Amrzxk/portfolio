@@ -52,7 +52,7 @@ const showResume = story.showResumeButton && isEnabled('resume') && !!resume.fil
           {story.stats.map((s, i) => (
             <div class="stat reveal" style={`--d:${i + 4}`}>
               <dt class="mono">{s.label}</dt>
-              <dd class="serif">{s.value}</dd>
+              <dd class="display">{s.value}</dd>
             </div>
           ))}
         </dl>
@@ -87,9 +87,9 @@ const showResume = story.showResumeButton && isEnabled('resume') && !!resume.fil
     color: var(--muted);
   }
   h1 {
-    font-size: clamp(2.9rem, 5.2vw + 1rem, 5.6rem);
-    line-height: 0.98;
-    letter-spacing: -0.02em;
+    font-size: clamp(2.05rem, 2.5vw + 1.15rem, 3.7rem);
+    line-height: 1.08;
+    letter-spacing: -0.05em;
   }
   .roles {
     margin-top: 26px;
@@ -139,7 +139,7 @@ const showResume = story.showResumeButton && isEnabled('resume') && !!resume.fil
   }
   .stat dd {
     margin: 0;
-    font-size: clamp(2.4rem, 2.6vw + 1.2rem, 3.4rem);
+    font-size: clamp(2rem, 1.8vw + 1.2rem, 2.8rem);
     line-height: 1;
   }
   .stat dt {
@@ -168,7 +168,7 @@ const showResume = story.showResumeButton && isEnabled('resume') && !!resume.fil
       border-bottom: 1px solid var(--border);
     }
     .stat dd {
-      font-size: 2.3rem;
+      font-size: 1.9rem;
     }
     .stat dt {
       text-align: right;

@@ -10,7 +10,7 @@ export function escapeHtml(s: string): string {
 
 /**
  * Editors can wrap words in *asterisks* in headings to emphasise them
- * (rendered as italic serif with the accent colour / beige underline).
+ * (rendered as the accent colour / beige underline).
  */
 export function emphasize(s: string): string {
   return escapeHtml(s).replace(/\*(.+?)\*/g, '<em class="em">$1</em>');

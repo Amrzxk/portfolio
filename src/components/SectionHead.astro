@@ -1,62 +1,160 @@
 ---
-import { emphasize } from '../lib/format';
+import { emphasize, plain } from '../lib/format';
 
 interface Props {
-  /** "01 · story" → index "01", label "story" */
+  /** "03/09 · skills" → counter "03/09", label "skills" */
   kicker: string;
+  /** Short section title — becomes the sliding marquee */
   title: string;
+  /** Optional longer statement shown under the marquee (supports *emphasis*) */
+  heading?: string;
   intro?: string;
 }
-const { kicker, title, intro } = Astro.props;
-const [idx, label] = kicker.includes(' · ') ? kicker.split(' · ') : ['', kicker];
+const { kicker, title, heading, intro } = Astro.props;
+const [count, label] = kicker.includes(' · ') ? kicker.split(' · ') : ['', kicker];
+const word = plain(title);
+// Alternate slide direction section by section
+const n = parseInt(count, 10) || 0;
+const dir = n % 2 === 0 ? -1 : 1;
+const copies = Array.from({ length: 8 });
 ---
 
-<header class="sh reveal">
-  <p class="sh-meta mono">
-    {idx && <span class="idx">{idx}</span>}
-    <span>/{label}</span>
-  </p>
-  <div class="sh-main">
-    <h2 set:html={emphasize(title)} />
-    {intro && <p class="lede">{intro}</p>}
-    <slot />
+<header class="sh">
+  <div class="mq" data-marquee data-dir={dir} aria-hidden="true">
+    <div class="mq-track">
+      {
+        copies.map((_, i) => (
+          <>
+            <span class:list={['w', { o: i % 2 === 1 }]}>{word}</span>
+            <span class="sep">/</span>
+          </>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="foot">
+    <h2 class="sr-only">{word}</h2>
+    <p class="count mono reveal">
+      {count && <span class="c">{count.replace('/', ' / ')}</span>}
+      <span class="faint">~/{label}</span>
+    </p>
+    <div class="text">
+      {heading && <p class="statement display reveal" style="--d:1" set:html={emphasize(heading)} />}
+      {intro && <p class="lede reveal" style="--d:2">{intro}</p>}
+      <slot />
+    </div>
   </div>
 </header>
 
 <style>
   .sh {
-    display: grid;
-    grid-template-columns: 200px minmax(0, 1fr);
-    gap: 12px 24px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
     margin-bottom: clamp(40px, 6vw, 72px);
   }
-  .sh-meta {
-    display: flex;
-    gap: 12px;
-    padding-top: 0.55em;
-    font-size: 0.78rem;
-    color: var(--faint);
+  .mq {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    overflow: hidden;
+    border-block: 1px solid var(--border);
+    padding: clamp(10px, 1.6vw, 20px) 0;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
   }
-  .idx {
+  .mq-track {
+    display: flex;
+    align-items: center;
+    gap: 0.35em;
+    width: max-content;
+    font-family: var(--font-display);
+    font-stretch: 112.5%;
+    font-weight: 600;
+    font-size: clamp(3rem, 9vw, 8.5rem);
+    line-height: 1;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    will-change: transform;
+    transform: translate3d(var(--x, -20%), 0, 0);
+  }
+  .w {
+    color: var(--text);
+  }
+  .w.o {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--border-strong);
+  }
+  .sep {
+    font-weight: 300;
+    font-size: 0.6em;
     color: var(--accent-ink);
   }
-  h2 {
-    font-size: clamp(2.4rem, 3.8vw + 1rem, 4.2rem);
+  .foot {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+    margin-top: clamp(20px, 3vw, 32px);
+  }
+  .count {
+    display: flex;
+    gap: 14px;
+    font-size: 0.74rem;
+  }
+  .c {
+    color: var(--accent-ink);
+  }
+  .text {
+    max-width: 900px;
+  }
+  .statement {
+    font-size: clamp(1.5rem, 1.8vw + 0.9rem, 2.6rem);
+    line-height: 1.15;
+    letter-spacing: -0.045em;
   }
   .lede {
-    margin-top: 16px;
-    max-width: 58ch;
+    max-width: 60ch;
     color: var(--muted);
-    font-size: clamp(1rem, 0.3vw + 0.96rem, 1.1rem);
+    font-size: clamp(1.02rem, 0.3vw + 0.98rem, 1.14rem);
   }
-  @media (max-width: 759px) {
-    .sh {
-      grid-template-columns: minmax(0, 1fr);
-    }
-    .sh-meta {
-      padding-top: 0;
-    }
+  .statement + .lede {
+    margin-top: 16px;
   }
 </style>
+
+<script>
+  // Slide each marquee horizontally while its section header passes through the viewport.
+  const mqs = [...document.querySelectorAll<HTMLElement>('[data-marquee]')];
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (mqs.length && !reduce) {
+    const visible = new Set<HTMLElement>();
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => (e.isIntersecting ? visible.add(e.target as HTMLElement) : visible.delete(e.target as HTMLElement)));
+        onScroll();
+      },
+      { rootMargin: '10% 0px' },
+    );
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const vh = window.innerHeight;
+      visible.forEach((m) => {
+        const r = m.getBoundingClientRect();
+        const p = Math.min(1, Math.max(0, (vh - r.top) / (vh + r.height)));
+        const dir = Number(m.dataset.dir) || 1;
+        const track = m.firstElementChild as HTMLElement;
+        const travel = window.innerWidth * 0.45;
+        const x = -track.scrollWidth * 0.2 + (p - 0.5) * travel * dir;
+        track.style.setProperty('--x', `${x.toFixed(1)}px`);
+      });
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    mqs.forEach((m) => io.observe(m));
+  }
+</script>

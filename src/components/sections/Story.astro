@@ -1,4 +1,9 @@
 ---
+/**
+ * "Zoom out" story: a pinned stage where scrolling pulls the camera back
+ * from a few lines of code → a function → a system → a cluster → the cloud.
+ * Chapters come from the CMS; the scene is fixed design.
+ */
 import SectionHead from '../SectionHead.astro';
 import { story } from '../../lib/data';
 
@@ -7,34 +12,155 @@ interface Props {
   kicker: string;
 }
 const { title, kicker } = Astro.props;
+const chapters = story.chapters;
+const levels = ['line', 'app', 'system', 'cluster', 'cloud'];
 ---
 
 {
-  story.chapters.length > 0 && (
-    <section id="story" class="section">
+  chapters.length > 0 && (
+    <section id="story" class="section story">
       <div class="container">
         <SectionHead kicker={kicker} title={title} intro={story.chaptersIntro} />
+      </div>
 
-        <div class="timeline" data-timeline>
-          <span class="rail" aria-hidden="true">
-            <span class="rail-fill" />
-          </span>
-          <ol>
-            {story.chapters.map((c, i) => (
-              <li class="chapter reveal">
-                <span class="node" aria-hidden="true" />
+      <div class="zoom" data-zoom style={`--n:${chapters.length}`}>
+        <div class="stage">
+          <svg class="scene" data-scene viewBox="-800 -500 1600 1000" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <defs>
+              <pattern id="zgrid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M40 0H0V40" class="gridline" />
+              </pattern>
+            </defs>
+            <rect x="-4000" y="-3000" width="8000" height="6000" fill="url(#zgrid)" class="gridbg" />
+
+            <g data-cam>
+              {/* ── L5 · cloud: regions + links ── */}
+              <g class="lvl" data-lvl="4">
+                <path class="link" id="l-eu" d="M-560 -170 C -420 -330, -260 -300, -150 -230" />
+                <path class="link" id="l-ap" d="M150 230 C 280 330, 430 320, 560 190" />
+                <path class="link" d="M-560 -170 C -700 120, 300 470, 560 190" />
+                <circle r="5" class="pkt"><animateMotion dur="3.6s" repeatCount="indefinite" path="M-560 -170 C -420 -330, -260 -300, -150 -230" /></circle>
+                <circle r="5" class="pkt"><animateMotion dur="4.2s" repeatCount="indefinite" path="M150 230 C 280 330, 430 320, 560 190" /></circle>
+                <circle r="4" class="pkt dim"><animateMotion dur="7s" repeatCount="indefinite" path="M-560 -170 C -700 120, 300 470, 560 190" /></circle>
+
+                <g transform="translate(-600 -170)">
+                  <rect class="box region" x="-150" y="-105" width="300" height="210" rx="10" />
+                  <text class="lbl" x="-136" y="-82" font-size="15">eu-west-1</text>
+                  <rect class="box" x="-90" y="-50" width="180" height="110" rx="6" />
+                  {[0, 1, 2, 3, 4, 5].map((i) => <rect class="node" x={-70 + (i % 3) * 50} y={-30 + Math.floor(i / 3) * 45} width="38" height="30" rx="3" />)}
+                </g>
+                <g transform="translate(600 190)">
+                  <rect class="box region" x="-150" y="-105" width="300" height="210" rx="10" />
+                  <text class="lbl" x="-136" y="-82" font-size="15">ap-south-1</text>
+                  <rect class="box" x="-90" y="-50" width="180" height="110" rx="6" />
+                  {[0, 1, 2, 3, 4, 5].map((i) => <rect class="node" x={-70 + (i % 3) * 50} y={-30 + Math.floor(i / 3) * 45} width="38" height="30" rx="3" />)}
+                </g>
+                <rect class="box region hot" x="-390" y="-250" width="780" height="500" rx="14" />
+                <text class="lbl hot" x="-370" y="-222" font-size="17">us-east-1 · primary</text>
+                <text class="cap" x="0" y="300" font-size="18" text-anchor="middle">3 regions · 1 platform · 0 downtime</text>
+              </g>
+
+              {/* ── L4 · cluster ── */}
+              <g class="lvl" data-lvl="3">
+                <rect class="box cluster" x="-290" y="-190" width="580" height="380" rx="10" />
+                <text class="lbl" x="-272" y="-166" font-size="12">eks-prod · k8s 1.31</text>
+                {[
+                  [-230, -120],
+                  [-230, 60],
+                  [180, -120],
+                  [180, 60],
+                ].map(([x, y]) => (
+                  <g transform={`translate(${x} ${y})`}>
+                    <rect class="box" width="56" height="64" rx="4" />
+                    {[0, 1, 2, 3].map((i) => <rect class="node" x={8 + (i % 2) * 22} y={10 + Math.floor(i / 2) * 26} width="16" height="18" rx="2" />)}
+                  </g>
+                ))}
+                <text class="cap" x="0" y="170" font-size="9" text-anchor="middle">nodes autoscale with karpenter</text>
+              </g>
+
+              {/* ── L3 · system: services ── */}
+              <g class="lvl" data-lvl="2">
+                <path class="link" d="M-22 0 H-88" />
+                <path class="link" d="M22 0 H88" />
+                <path class="link" d="M0 14 V62" />
+                <path class="link" d="M110 14 V62" />
+                <circle r="1.6" class="pkt"><animateMotion dur="1.8s" repeatCount="indefinite" path="M-88 0 H-22" /></circle>
+                <circle r="1.6" class="pkt"><animateMotion dur="2.2s" repeatCount="indefinite" path="M22 0 H88" /></circle>
+                <circle r="1.6" class="pkt"><animateMotion dur="1.6s" repeatCount="indefinite" path="M0 14 V62" /></circle>
+                <g transform="translate(-110 0)">
+                  <rect class="box" x="-22" y="-14" width="44" height="28" rx="3" />
+                  <text class="lbl" x="0" y="2" font-size="5" text-anchor="middle">auth</text>
+                </g>
+                <g transform="translate(110 0)">
+                  <rect class="box" x="-22" y="-14" width="44" height="28" rx="3" />
+                  <text class="lbl" x="0" y="2" font-size="5" text-anchor="middle">orders</text>
+                </g>
+                <g transform="translate(110 76)">
+                  <rect class="box" x="-24" y="-12" width="48" height="24" rx="12" />
+                  <text class="lbl" x="0" y="2" font-size="4.6" text-anchor="middle">queue</text>
+                </g>
+                <g transform="translate(0 78)">
+                  <ellipse class="box" cx="0" cy="-10" rx="18" ry="5" />
+                  <path class="box" d="M-18 -10 V12 A18 5 0 0 0 18 12 V-10" />
+                  <text class="lbl" x="0" y="6" font-size="4.6" text-anchor="middle">postgres</text>
+                </g>
+                <text class="cap" x="0" y="-36" font-size="5" text-anchor="middle">request → auth → api → orders → queue</text>
+              </g>
+
+              {/* ── L2 · app: functions inside the api service ── */}
+              <g class="lvl" data-lvl="1">
+                <rect class="box hot" x="-22" y="-14" width="44" height="28" rx="3" />
+                <text class="lbl hot" x="-20" y="-10.5" font-size="2.4">api-gateway</text>
+                <rect class="box" x="-19" y="-6" width="10" height="13" rx="1" />
+                <text class="lbl" x="-14" y="9.6" font-size="1.4" text-anchor="middle">route()</text>
+                <rect class="box" x="9" y="-6" width="10" height="13" rx="1" />
+                <text class="lbl" x="14" y="9.6" font-size="1.4" text-anchor="middle">auth()</text>
+                {[-4, -1, 2].map((y) => <path class="code-dim" d={`M-17 ${y} h${y === -1 ? 4 : 6}`} />)}
+                {[-4, -1, 2].map((y) => <path class="code-dim" d={`M11 ${y} h${y === 2 ? 3 : 6}`} />)}
+              </g>
+
+              {/* ── L1 · line: the code itself ── */}
+              <g class="lvl" data-lvl="0">
+                <rect class="box hot codebox" x="-7" y="-6" width="14" height="13" rx="0.8" />
+                <text class="code" x="-6" y="-3.6" font-size="0.95"><tspan class="kw">fn</tspan> ship(app) {'{'}</text>
+                <text class="code" x="-6" y="-1.8" font-size="0.95">  test(app)</text>
+                <text class="code" x="-6" y="0" font-size="0.95">  build(app)</text>
+                <text class="code" x="-6" y="1.8" font-size="0.95">  deploy(<tspan class="kw">prod</tspan>)</text>
+                <text class="code" x="-6" y="3.6" font-size="0.95">{'}'}</text>
+                <text class="lbl" x="0" y="9.6" font-size="0.9" text-anchor="middle">handler()</text>
+              </g>
+            </g>
+          </svg>
+
+          <div class="hud mono" aria-hidden="true">
+            <p class="scale">
+              zoom <span data-scale>1:1</span>
+            </p>
+            <ol class="levels">
+              {levels.map((l, i) => (
+                <li data-level-label={i}>{l}</li>
+              ))}
+            </ol>
+          </div>
+
+          <ol class="chapters">
+            {chapters.map((c, i) => (
+              <li class="chapter" data-chapter={i}>
                 <p class="marker mono">
-                  <span class="num">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="num">
+                    {String(i + 1).padStart(2, '0')}/{String(chapters.length).padStart(2, '0')}
+                  </span>
                   {c.marker}
                 </p>
-                <div class="body">
-                  <h3 class="serif">{c.title}</h3>
-                  <p>{c.body}</p>
-                  {c.image && <img src={c.image} alt="" loading="lazy" decoding="async" />}
-                </div>
+                <h3 class="display">{c.title}</h3>
+                <p class="body">{c.body}</p>
               </li>
             ))}
           </ol>
+
+          <div class="bar" aria-hidden="true">
+            <span data-bar />
+          </div>
         </div>
       </div>
     </section>
@@ -42,114 +168,327 @@ const { title, kicker } = Astro.props;
 }
 
 <style>
-  .timeline {
-    --p: 0;
-    --rail-x: 8px;
-    position: relative;
-    margin-left: 200px;
-    padding-left: 44px;
-  }
-  .rail {
-    position: absolute;
-    left: var(--rail-x);
-    top: 10px;
-    bottom: 10px;
-    width: 1px;
-    background: var(--border-strong);
-  }
-  .rail-fill {
-    position: absolute;
-    inset: 0;
-    width: 2px;
-    left: -0.5px;
-    background: var(--accent-ink);
-    transform-origin: top;
-    transform: scaleY(var(--p));
-  }
-  .chapter {
-    position: relative;
-    display: grid;
-    grid-template-columns: 170px minmax(0, 1fr);
-    gap: 8px 32px;
-    padding-bottom: clamp(40px, 6vw, 72px);
-  }
-  .chapter:last-child {
+  .story {
     padding-bottom: 0;
   }
-  .node {
-    position: absolute;
-    left: calc(var(--rail-x) - 44px - 4px);
-    top: 0.75em;
-    width: 9px;
-    height: 9px;
-    background: var(--bg);
-    border: 1px solid var(--border-strong);
-    transform: rotate(45deg);
-    transition:
-      background-color 0.5s,
-      border-color 0.5s;
+
+  /* ── Static fallback (no JS / reduced motion): scene on top, chapters listed ── */
+  .zoom {
+    position: relative;
   }
-  .chapter.in .node {
-    background: var(--accent-ink);
-    border-color: var(--accent-ink);
+  .stage {
+    position: relative;
+  }
+  .scene {
+    display: block;
+    width: 100%;
+    height: min(70vh, 640px);
+  }
+  .chapters {
+    display: grid;
+    gap: 40px;
+    width: min(100% - 2 * var(--gutter), var(--container));
+    margin: 32px auto 0;
+    padding-bottom: clamp(64px, 9vw, 120px);
+  }
+  .hud,
+  .bar {
+    display: none;
+  }
+
+  /* ── Live pinned mode ── */
+  .zoom.live {
+    height: calc(var(--n) * 110vh + 60vh);
+  }
+  .zoom.live .stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+  }
+  .zoom.live .scene {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+  }
+  .zoom.live .chapters {
+    position: absolute;
+    left: max(var(--gutter), calc((100vw - var(--container)) / 2));
+    bottom: clamp(48px, 9vh, 96px);
+    width: min(440px, calc(100% - 2 * var(--gutter)));
+    margin: 0;
+    padding: 0;
+    display: block;
+  }
+  .zoom.live .chapter {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.5s var(--ease),
+      transform 0.6s var(--ease);
+    pointer-events: none;
+  }
+  .zoom.live .chapter.on {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+  .zoom.live .hud {
+    display: grid;
+    gap: 14px;
+    position: absolute;
+    top: calc(var(--nav-h) + 24px);
+    right: max(var(--gutter), calc((100vw - var(--container)) / 2));
+    font-size: 0.72rem;
+    text-align: right;
+  }
+  .zoom.live .bar {
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: var(--border);
+  }
+
+  .chapter {
+    max-width: 560px;
   }
   .marker {
     display: flex;
-    gap: 10px;
-    padding-top: 0.55em;
-    font-size: 0.78rem;
+    gap: 12px;
+    font-size: 0.74rem;
     color: var(--muted);
     text-transform: lowercase;
   }
   .num {
     color: var(--accent-ink);
   }
-  .body h3 {
-    font-size: clamp(1.8rem, 1.6vw + 1.1rem, 2.5rem);
-    line-height: 1.08;
+  .chapter h3 {
+    margin-top: 12px;
+    font-size: clamp(1.4rem, 1.3vw + 0.9rem, 2.1rem);
+    line-height: 1.12;
+    letter-spacing: -0.045em;
   }
-  .body p {
+  .chapter .body {
     margin-top: 12px;
     color: var(--muted);
-    font-size: clamp(1rem, 0.25vw + 0.96rem, 1.08rem);
-    max-width: 60ch;
+    font-size: clamp(0.98rem, 0.25vw + 0.94rem, 1.06rem);
   }
-  .body img {
-    margin-top: 20px;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
+  .zoom.live .chapter .body,
+  .zoom.live .chapter h3 {
+    text-shadow: 0 0 18px var(--bg), 0 0 6px var(--bg);
   }
-  @media (max-width: 959px) {
-    .timeline {
-      margin-left: 0;
-    }
+
+  .scale {
+    color: var(--muted);
   }
-  @media (max-width: 639px) {
-    .timeline {
-      padding-left: 32px;
-      --rail-x: 4px;
+  .scale span {
+    color: var(--accent-ink);
+    font-size: 1.05rem;
+  }
+  .levels {
+    display: grid;
+    gap: 6px;
+    color: var(--faint);
+  }
+  .levels li {
+    transition: color 0.3s;
+  }
+  .levels li.on {
+    color: var(--accent-ink);
+  }
+  .levels li.on::before {
+    content: '› ';
+  }
+  .bar span {
+    display: block;
+    height: 100%;
+    background: var(--accent-ink);
+    transform-origin: left;
+    transform: scaleX(var(--p, 0));
+  }
+
+  /* ── Scene styling (works in both themes) ── */
+  .scene :global(.gridline) {
+    fill: none;
+    stroke: var(--border);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+    opacity: 0.6;
+  }
+  .scene :global(.box) {
+    fill: color-mix(in oklab, var(--surface) 70%, transparent);
+    stroke: var(--border-strong);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+  .scene :global(.region) {
+    fill: color-mix(in oklab, var(--surface) 45%, transparent);
+    stroke-dasharray: 6 5;
+  }
+  .scene :global(.cluster) {
+    fill: color-mix(in oklab, var(--surface) 55%, transparent);
+  }
+  .scene :global(.box.hot) {
+    stroke: var(--accent-ink);
+    stroke-width: 1.4;
+  }
+  .scene :global(.codebox) {
+    fill: var(--term-bg);
+  }
+  .scene :global(.node) {
+    fill: var(--accent-soft);
+    stroke: var(--accent-line);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+  .scene :global(.link) {
+    fill: none;
+    stroke: var(--border-strong);
+    stroke-width: 1.2;
+    stroke-dasharray: 4 4;
+    vector-effect: non-scaling-stroke;
+  }
+  .scene :global(.pkt) {
+    fill: var(--accent);
+  }
+  .scene :global(.pkt.dim) {
+    opacity: 0.5;
+  }
+  .scene :global(text) {
+    font-family: var(--font-mono);
+    font-stretch: 87.5%;
+  }
+  .scene :global(.lbl) {
+    fill: var(--muted);
+  }
+  .scene :global(.lbl.hot) {
+    fill: var(--accent-ink);
+  }
+  .scene :global(.cap) {
+    fill: var(--faint);
+  }
+  .scene :global(.code) {
+    fill: var(--term-text);
+    white-space: pre;
+  }
+  .scene :global(.kw) {
+    fill: var(--accent);
+  }
+  .scene :global(.code-dim) {
+    stroke: var(--faint);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+  .scene :global(.lvl) {
+    transition: opacity 0.4s;
+  }
+
+  @media (max-width: 759px) {
+    .zoom.live .chapters {
+      bottom: 28px;
     }
-    .node {
-      left: calc(var(--rail-x) - 32px - 4px);
+    .zoom.live .hud {
+      top: calc(var(--nav-h) + 12px);
+      grid-auto-flow: column;
+      align-items: baseline;
+      gap: 18px;
     }
-    .chapter {
-      grid-template-columns: minmax(0, 1fr);
+    .zoom.live .levels {
+      display: none;
     }
-    .marker {
-      padding-top: 0.3em;
+    .zoom.live .chapter {
+      padding-top: 80px;
+      background: linear-gradient(to bottom, transparent, var(--bg) 70px);
     }
   }
 </style>
 
 <script>
-  const tl = document.querySelector<HTMLElement>('[data-timeline]');
-  if (tl) {
+  const root = document.querySelector<HTMLElement>('[data-zoom]');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (root && !reduce) {
+    const svg = root.querySelector<SVGSVGElement>('[data-scene]')!;
+    const cam = root.querySelector<SVGGElement>('[data-cam]')!;
+    const stage = root.querySelector<HTMLElement>('.stage')!;
+    const chapters = [...root.querySelectorAll<HTMLElement>('[data-chapter]')];
+    const levelLabels = [...root.querySelectorAll<HTMLElement>('[data-level-label]')];
+    const levelGroups = [...root.querySelectorAll<SVGGElement>('[data-lvl]')];
+    const scaleEl = root.querySelector<HTMLElement>('[data-scale]')!;
+    const barEl = root.querySelector<HTMLElement>('[data-bar]')!;
+    root.classList.add('live');
+
+    // World-space width of each level (line → cloud)
+    const WIDTHS = [14, 44, 260, 580, 1600];
+    let vbW = 1600;
+    let vbH = 1000;
+    let mobile = false;
+
+    const layout = () => {
+      const W = stage.clientWidth || window.innerWidth;
+      const H = stage.clientHeight || window.innerHeight;
+      mobile = W < 760;
+      const aspect = W / H;
+      vbW = Math.max(1600, 1000 * aspect);
+      if (mobile) vbW = 1700;
+      vbH = vbW / aspect;
+      svg.setAttribute('viewBox', `${-vbW / 2} ${-vbH / 2} ${vbW} ${vbH}`);
+      svg.setAttribute('preserveAspectRatio', 'xMidYMid slice');
+    };
+
+    const smooth = (t: number) => t * t * (3 - 2 * t);
+    const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+
     let ticking = false;
+    let lastChapter = -1;
     const update = () => {
       ticking = false;
-      const r = tl.getBoundingClientRect();
-      const p = Math.min(1, Math.max(0, (window.innerHeight * 0.6 - r.top) / r.height));
-      tl.style.setProperty('--p', p.toFixed(3));
+      const r = root.getBoundingClientRect();
+      const total = r.height - window.innerHeight;
+      const p = clamp(-r.top / total);
+
+      // Each level gets a resting zoom; travel between them eases so the camera lingers.
+      const fill = mobile ? 0.82 : 0.62;
+      const scales = WIDTHS.map((w, i) => (i === WIDTHS.length - 1 ? 0.96 : (fill * vbW) / w));
+      const pos = p * (scales.length - 1);
+      const k = Math.min(scales.length - 2, Math.floor(pos));
+      const t = smooth(clamp((pos - k - 0.2) / 0.6));
+      const s = Math.exp(Math.log(scales[k]) + (Math.log(scales[k + 1]) - Math.log(scales[k])) * t);
+
+      // Keep the focal point clear of the text panel
+      const fx = mobile ? 0 : vbW * 0.14 * (1 - p * 0.9);
+      const fy = mobile ? -vbH * 0.16 : -vbH * 0.03;
+      cam.setAttribute('transform', `translate(${fx.toFixed(2)} ${fy.toFixed(2)}) scale(${s.toFixed(4)})`);
+
+      // Fade each level's details in/out by how large it is on screen
+      levelGroups.forEach((g) => {
+        const i = Number(g.dataset.lvl);
+        const onScreen = (WIDTHS[i] * s) / vbW; // fraction of stage width
+        // Fade out when the level is too small to read; fade in only as the camera nears it.
+        const small = onScreen < 0.04 ? clamp(onScreen / 0.04) : 1;
+        const near = i === 0 ? 1 : clamp((1.55 - onScreen) / 0.5);
+        const o = i === 4 ? near * 0.85 + 0.15 : small * near;
+        g.style.opacity = o.toFixed(3);
+      });
+
+      const lvl = Math.round(pos);
+      levelLabels.forEach((l, i) => l.classList.toggle('on', i === lvl));
+      scaleEl.textContent = `1:${Math.max(1, Math.round(s / scales[scales.length - 1]))}`;
+      barEl.style.setProperty('--p', p.toFixed(4));
+
+      const n = chapters.length;
+      const ci = Math.min(n - 1, Math.round(p * (n - 1)));
+      if (ci !== lastChapter) {
+        chapters.forEach((c, i) => c.classList.toggle('on', i === ci));
+        lastChapter = ci;
+      }
     };
     const onScroll = () => {
       if (!ticking) {
@@ -157,8 +496,14 @@ const { title, kicker } = Astro.props;
         requestAnimationFrame(update);
       }
     };
+    layout();
     update();
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
+    window.addEventListener('resize', () => {
+      layout();
+      onScroll();
+    });
+  } else if (root && reduce) {
+    root.querySelector<SVGSVGElement>('[data-scene]')?.pauseAnimations();
   }
 </script>
