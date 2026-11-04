@@ -8,7 +8,7 @@ backend:
   repo: Amrzxk/portfolio
   branch: main
   # OAuth helper (Cloudflare Worker). See SETUP.md, step 3.
-  base_url: https://sveltia-cms-auth.CHANGE-ME.workers.dev
+  base_url: https://sveltia-cms-auth.amrzakariya2020.workers.dev
   commit_messages:
     create: 'content: create {{collection}} “{{slug}}”'
     update: 'content: update {{collection}} “{{slug}}”'
