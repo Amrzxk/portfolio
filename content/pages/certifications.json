@@ -47,7 +47,7 @@
       "date": "12/2025",
       "credentialId": "HWENDCTEDA150330",
       "verifyUrl": "",
-      "badge": ""
+      "badge": "/uploads/HCCDA.jpg"
     },
     {
       "name": "HCCDP – Cloud Migration",
@@ -55,7 +55,7 @@
       "date": "12/2025",
       "credentialId": "HWENDCTEDA150330",
       "verifyUrl": "",
-      "badge": ""
+      "badge": "/uploads/HCCDP.jpg"
     },
     {
       "name": "Containers and Kubernetes Essentials",
@@ -63,7 +63,7 @@
       "date": "05/2025",
       "credentialId": "c807d5e6-6fbd-4956-b04d-5823824a65b0",
       "verifyUrl": "https://www.credly.com/badges/c807d5e6-6fbd-4956-b04d-5823824a65b0",
-      "badge": ""
+      "badge": "/uploads/Capture4.JPG"
     },
     {
       "name": "Cloud Security",
