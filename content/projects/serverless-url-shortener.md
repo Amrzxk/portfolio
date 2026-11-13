@@ -15,7 +15,7 @@ stack:
   - CloudFormation
   - GitHub Actions
   - CloudWatch
-cover: /uploads/ServerlessArch.png
+cover: ''
 repo: https://github.com/Amrzxk/Serverless-URL-Shortener-AWS
 live: ''
 featured: true
