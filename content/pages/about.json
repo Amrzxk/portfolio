@@ -1,7 +1,7 @@
 {
   "kicker": "About me",
   "heading": "Everything as code — *infrastructure* included.",
-  "photo": "",
+  "photo": "/uploads/me(cropped).jpeg",
   "body": "I'm a cloud and DevOps engineer and a Computer Science & Artificial Intelligence graduate from Capital University in Cairo. I treat infrastructure the way good engineers treat software: declared in code, reviewed, versioned and deployed by pipelines — never clicked together by hand.\n\nI build on AWS across compute, serverless, networking and IAM; containerise workloads with Docker and Kubernetes; run keyless CI/CD in GitHub Actions with OIDC federation; and define infrastructure in Terraform, CloudFormation and SAM. Security and cost are part of the design from the start: least-privilege IAM, locked-down S3, CloudWatch alarms and budget alerts.\n\nI'm comfortable on Linux, with practical experience in VPC design, cloud security and incident response — and I'm looking for DevOps and Cloud Engineering roles, on-site, hybrid or remote.",
   "highlights": [
     "AWS: EC2, Lambda, API Gateway, DynamoDB, VPC, IAM",
@@ -9,5 +9,8 @@
     "Docker, Kubernetes & k3s · GitOps with ArgoCD",
     "Arabic (native) · English (professional)"
   ],
-  "availability": { "open": true, "text": "Open to DevOps & Cloud roles · on-site, hybrid or remote" }
+  "availability": {
+    "open": true,
+    "text": "Open to DevOps & Cloud roles · on-site, hybrid or remote"
+  }
 }
