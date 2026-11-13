@@ -1,11 +1,23 @@
 ---
 title: Serverless URL Shortener
 summary: A low-cost serverless redirection service on AWS — 25+ resources defined in SAM and CloudFormation, deployed in under two minutes through keyless GitHub Actions CI/CD.
-domains: [cloud, devops, system-design]
-stack: [AWS Lambda, API Gateway, DynamoDB, S3, CloudFront, AWS SAM, CloudFormation, GitHub Actions, CloudWatch]
-cover: ""
-repo: ""
-live: ""
+domains:
+  - cloud
+  - devops
+  - system-design
+stack:
+  - AWS Lambda
+  - API Gateway
+  - DynamoDB
+  - S3
+  - CloudFront
+  - AWS SAM
+  - CloudFormation
+  - GitHub Actions
+  - CloudWatch
+cover: /uploads/ServerlessArch.png
+repo: https://github.com/Amrzxk/Serverless-URL-Shortener-AWS
+live: ''
 featured: true
 order: 2
 date: 2025-06-01
