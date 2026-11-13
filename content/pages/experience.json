@@ -4,7 +4,7 @@
     {
       "role": "IT Intern",
       "company": "Genesis Creations S.A.E",
-      "companyUrl": "",
+      "companyUrl": "https://www.genesiscreations.co/",
       "location": "Cairo, Egypt",
       "start": "Oct 2025",
       "end": "Jan 2026",
@@ -16,7 +16,12 @@
         "Maintained IT asset inventory and device lifecycle records — assignments, accessories and employee handovers",
         "Worked alongside the engineering team on cloud and deployment operations, following release, automation and infrastructure practices in a live environment"
       ],
-      "stack": ["Microsoft 365", "RBAC", "Networking", "Incident response"]
+      "stack": [
+        "Microsoft 365",
+        "RBAC",
+        "Networking",
+        "Incident response"
+      ]
     },
     {
       "role": "B.Sc. Computer Science & Artificial Intelligence",
