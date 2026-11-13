@@ -1,11 +1,24 @@
 ---
 title: Hybrid Intrusion Detection System (H-IDS)
 summary: My graduation project — a containerised IDS pairing a three-tier ML pipeline with Snort 3 signatures, sustaining roughly 111K flows per second with live verdicts on a React dashboard.
-domains: [system-design, devops, app-web]
-stack: [Python, FastAPI, Gunicorn, PostgreSQL 16, Redis Pub/Sub, NFStream, Snort 3, React, Docker Compose, AWS EC2]
-cover: ""
-repo: ""
-live: ""
+domains:
+  - system-design
+  - devops
+  - app-web
+stack:
+  - Python
+  - FastAPI
+  - Gunicorn
+  - PostgreSQL 16
+  - Redis Pub/Sub
+  - NFStream
+  - Snort 3
+  - React
+  - Docker Compose
+  - AWS EC2
+cover: ''
+repo: https://github.com/Amrzxk/CTD-Project
+live: ''
 featured: true
 order: 3
 date: 2025-10-01
