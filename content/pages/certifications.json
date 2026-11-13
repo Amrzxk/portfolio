@@ -15,62 +15,62 @@
       "date": "",
       "credentialId": "",
       "verifyUrl": "",
-      "badge": ""
+      "badge": "/uploads/AWS-NTI.jpg"
     },
     {
       "name": "AWS Academy Cloud Architecting",
       "issuer": "AWS Academy",
-      "date": "",
+      "date": "10/2024",
       "credentialId": "",
-      "verifyUrl": "",
+      "verifyUrl": "https://www.credly.com/badges/1804ec35-cf9b-42b5-90c5-e9bb11d3f6c9/linked_in_profile",
       "badge": ""
     },
     {
       "name": "AWS Academy Cloud Developer",
       "issuer": "AWS Academy",
-      "date": "",
+      "date": "08/2024",
       "credentialId": "",
-      "verifyUrl": "",
+      "verifyUrl": "https://www.credly.com/badges/e81f90b4-0e46-4dd0-ad9d-980222993cb7/linked_in_profile",
       "badge": ""
     },
     {
       "name": "AWS Academy Cloud Foundations",
       "issuer": "AWS Academy",
-      "date": "",
+      "date": "07/2024",
       "credentialId": "",
-      "verifyUrl": "",
+      "verifyUrl": "https://www.credly.com/badges/1a71d770-bfdd-4df7-a53a-3a54c883ddb4/linked_in_profile",
       "badge": ""
     },
     {
       "name": "HCCDA – Tech Essentials",
       "issuer": "Huawei Cloud",
-      "date": "",
-      "credentialId": "",
+      "date": "12/2025",
+      "credentialId": "HWENDCTEDA150330",
       "verifyUrl": "",
       "badge": ""
     },
     {
       "name": "HCCDP – Cloud Migration",
       "issuer": "Huawei Cloud",
-      "date": "",
-      "credentialId": "",
+      "date": "12/2025",
+      "credentialId": "HWENDCTEDA150330",
       "verifyUrl": "",
       "badge": ""
     },
     {
       "name": "Containers and Kubernetes Essentials",
       "issuer": "IBM",
-      "date": "",
-      "credentialId": "",
-      "verifyUrl": "",
+      "date": "05/2025",
+      "credentialId": "c807d5e6-6fbd-4956-b04d-5823824a65b0",
+      "verifyUrl": "https://www.credly.com/badges/c807d5e6-6fbd-4956-b04d-5823824a65b0",
       "badge": ""
     },
     {
       "name": "Cloud Security",
       "issuer": "IBM",
-      "date": "",
-      "credentialId": "",
-      "verifyUrl": "",
+      "date": "05/2025",
+      "credentialId": "3604b3a0-913b-4dc8-905b-dab0f8291200",
+      "verifyUrl": "https://www.credly.com/badges/3604b3a0-913b-4dc8-905b-dab0f8291200",
       "badge": ""
     }
   ]
